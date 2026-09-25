@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         taolambypass AUTO LINK4M
-// @namespace    link4m.net
-// @version      1.0
+// @namespace    minhphuong.link4m
+// @version      1.2
 // @description  T\u1EF1 \u0111\u1ED9ng \u0111i\u1EC1n m\u00E3 code khi v\u1EC1 link4m (\u0111\u00E3 fix font + gi\u1EA3m lag)
 // @author       taolambypass
 // @match        *://*/*
@@ -94,7 +94,7 @@
         return !isLink4m && !isGoogle && isTargetPage();
     }
 
-    if (!isLink4m && !isGoogle && !isTargetPage()) return;
+    if (!isLink4m && !isGoogle && !isTargetPage() && !/gtraffic\.io/i.test(HOST)) return;
 
     var C = {
         bg1: '#fff1f0', bg2: '#ffe4e1', card: '#ffffff',
@@ -104,6 +104,104 @@
 
     // \u1EA2nh n\u00FAt tr\u00F2n khi thu nh\u1ECF menu (\u1EA3nh con ch\u00F3 b\u1EA1n g\u1EEDi, \u0111\u00E3 n\u00E9n base64)
     var DOG_B64 = 'data:image/jpeg;base64,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';
+
+    /* ===== GTRAFFIC BYPASS ===== */
+    var GTRAFFIC_API = 'https://client.gtraffic.io/api/code/browser-solve';
+    var GTRAFFIC_DEFAULT = {
+        challengeId: 'cf743797760343baab90a92bef454409',
+        rid: 'a53f0dfb-5663-430d-9ee7-80e699d84f89',
+        token: 'lJO6/HlPLuNAuV1WM11A1m4bnM+QmPOB5xxhgtZNKaQ='
+    };
+    var gtTried = 0;
+
+    function getDomProof() {
+        try {
+            var nav = navigator || {};
+            var scr = screen || {};
+            var parts = [];
+            parts.push(nav.userAgent || '');
+            parts.push(nav.language || '');
+            parts.push(nav.platform || '');
+            parts.push((scr.width || 0) + 'x' + (scr.height || 0));
+            parts.push(String(window.devicePixelRatio || 1));
+            parts.push('webdriver-' + (navigator.webdriver ? '1' : '0'));
+            parts.push('touch-' + ('ontouchstart' in window ? '1' : '0'));
+            parts.push('visibility-' + (document.visibilityState || ''));
+            try {
+                var c = document.createElement('canvas');
+                c.width = 200; c.height = 40;
+                var ctx = c.getContext('2d');
+                ctx.textBaseline = 'top';
+                ctx.font = '16px Arial';
+                ctx.textBaseline = 'alphabetic';
+                ctx.fillStyle = '#f60';
+                ctx.fillRect(0, 0, c.width, c.height);
+                ctx.fillStyle = '#069';
+                ctx.fillText(nav.userAgent || '', 2, 20);
+                var data = c.toDataURL();
+                parts.push(data.substring(0, 64));
+            } catch (e) {}
+            var raw = parts.join('|');
+            return btoa(unescape(encodeURIComponent(raw)));
+        } catch (e) { return ''; }
+    }
+
+    function detectGtraffic() {
+        try {
+            var scripts = document.querySelectorAll('script');
+            for (var i = 0; i < scripts.length; i++) {
+                var t = scripts[i].textContent || '';
+                if (t.indexOf('browser-solve') === -1 && t.indexOf('challengeId') === -1) continue;
+                var cid = (t.match(/challengeId\s*[:=]\s*['"]([^'"]+)['"]/) || [])[1];
+                var rid = (t.match(/\brid\s*[:=]\s*['"]([^'"]+)['"]/) || [])[1];
+                var tok = (t.match(/\btoken\s*[:=]\s*['"]([^'"]+)['"]/) || [])[1];
+                if (cid && rid && tok) return { challengeId: cid, rid: rid, token: tok };
+            }
+        } catch (e) {}
+        try { if (window.challengeId && window.rid && window.token) return { challengeId: window.challengeId, rid: window.rid, token: window.token }; } catch (e) {}
+        if (/gtraffic\.io/i.test(location.host)) return GTRAFFIC_DEFAULT;
+        return null;
+    }
+
+    function gtrafficSolve(params) {
+        try {
+            var body = { challengeId: params.challengeId, rid: params.rid, token: params.token, domProof: getDomProof() };
+            fetch(GTRAFFIC_API, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(body)
+            }).then(function(r){ return r.json(); })
+              .then(function(res){
+                  if (res && res.ok) {
+                      window.__browser_challenge_ok = params.rid;
+                      log('\uD83D\uDC36 GTRAFFIC SOLVE OK \u2705');
+                      if (UI.status) UI.status.textContent = '\u2705 GTRAFFIC \u0111\u00E3 bypass th\u00E0nh c\u00F4ng';
+                  } else {
+                      window.__browser_challenge_ok = 'fail';
+                      log('\u274C GTRAFFIC SOLVE FAIL:', JSON.stringify(res));
+                  }
+              })
+              .catch(function(e){ window.__browser_challenge_ok = 'fail'; log('\u274C GTRAFFIC ERROR:', e && e.message); });
+        } catch (e) { window.__browser_challenge_ok = 'fail'; log('\u274C GTRAFFIC EXCEPTION:', e && e.message); }
+    }
+
+    function runGtrafficBypass(manual) {
+        var params = detectGtraffic();
+        if (!params) {
+            if (manual) {
+                log('\u26A0\uFE0F Kh\u00F4ng t\u00ECm th\u1EA5y GTRAFFIC challenge tr\u00EAn trang n\u00E0y');
+                if (UI.status) UI.status.textContent = '\u26A0\uFE0F Kh\u00F4ng c\u00F3 GTRAFFIC challenge';
+            }
+            return;
+        }
+        gtTried++;
+        log('\uD83D\uDC36 GTRAFFIC ' + (manual ? 'th\u1EE7 c\u00F4ng' : 't\u1EF1 \u0111\u1ED9ng') + ' solve l\u1EA7n ' + gtTried + ' | cid=' + params.challengeId.substring(0,10) + '...');
+        if (UI.status) UI.status.textContent = '\uD83D\uDC36 \u0110ang bypass GTRAFFIC... (l\u1EA7n ' + gtTried + ')';
+        gtrafficSolve(params);
+        if (gtTried < 3) {
+            setTimeout(function(){ if (window.__browser_challenge_ok !== params.rid) runGtrafficBypass(false); }, 4000);
+        }
+    }
 
     GM_addStyle(
         '#mp-root{position:fixed;top:10px;right:10px;z-index:2147483647;width:262px;font-family:"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif;font-size:12px;color:' + C.text + ';border-radius:18px;overflow:hidden;background:linear-gradient(160deg,' + C.bg1 + ' 0%,' + C.card + ' 60%,' + C.bg2 + ' 100%);box-shadow:0 10px 34px rgba(255,77,79,.35),0 0 0 1px ' + C.border + ';user-select:none;max-height:92vh;display:flex;flex-direction:column;contain:layout paint;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-rendering:optimizeLegibility}' +
@@ -231,7 +329,7 @@
                     '<div class="mp-flower">\uD83D\uDC36</div>' +
                     '<div class="mp-brand-txt">' +
                         '<div class="mp-title-main">taolambypass \uD83C\uDDFB\uD83C\uDDF3</div>' +
-                        '<div class="mp-title-sub">AUTO LINK4M v1.0</div>' +
+                        '<div class="mp-title-sub">AUTO LINK4M v1.2</div>' +
                     '</div>' +
                 '</div>' +
             '</div>' +
@@ -253,6 +351,9 @@
                 '<div class="mp-btn-row">' +
                     '<button class="mp-btn orange" id="mp-scroll-toggle" style="font-size:10.5px">\uD83D\uDD04 L\u01AF\u1EE2T NH\u1EB8</button>' +
                     '<button class="mp-btn purple" id="mp-lag-toggle" style="font-size:10.5px">\uD83D\uDE80 GI\u1EA2M LAG</button>' +
+                '</div>' +
+                                '<div class="mp-btn-row">' +
+                    '<button class="mp-btn blue" id="mp-gt-bypass" style="font-size:10.5px">\uD83D\uDC36 BYPASS GTRAFFIC</button>' +
                 '</div>' +
                 '<div class="mp-timer" id="mp-timer">' +
                     '<div class="mp-timer-wrap">' +
@@ -286,7 +387,8 @@
             saveBtn: root.querySelector('#mp-save-domain'),
             startBtn: root.querySelector('#mp-start'), domainList: root.querySelector('#mp-domain-list'),
             scrollToggleBtn: root.querySelector('#mp-scroll-toggle'),
-            lagToggleBtn: root.querySelector('#mp-lag-toggle')
+            lagToggleBtn: root.querySelector('#mp-lag-toggle'),
+            gtBtn: root.querySelector('#mp-gt-bypass')
         };
 
         UI.scrollToggleBtn.onclick = function() {
@@ -300,6 +402,8 @@
             log(on ? '\uD83D\uDC22 T\u1EAET gi\u1EA3m lag (ch\u1EA1y m\u01B0\u1EE3t g\u1ED1c)' : '\uD83D\uDE80 B\u1EACT gi\u1EA3m lag \u2014 qu\u00E9t nh\u1EB9 h\u01A1n, \u0111\u1EE1 gi\u1EADt');
         };
         updateLagBtn();
+
+        if (UI.gtBtn) UI.gtBtn.onclick = function() { gtTried = 0; runGtrafficBypass(true); };
 
         UI.copy.onclick = function() {
             var c = UI.codeVal.textContent;
@@ -509,6 +613,63 @@
                 } catch (e) {}
             }
         }
+        return null;
+    }
+
+    // T\u00ECm ph\u1EA7n t\u1EED ch\u1EE9a text \u0111\u1EBFm ng\u01B0\u1EE3c \u0111\u1EC3 l\u00E0m m\u1ECF neo
+    function findCountdownElement() {
+        var sels = ['button','a','[role="button"]','#timer','#countdown','#clock','.timer','.countdown','.clock','[id*="timer" i]','[id*="count" i]','[id*="clock" i]','[id*="wait" i]','[class*="timer" i]','[class*="count" i]','[class*="clock" i]','[class*="wait" i]','div','span'];
+        for (var s = 0; s < sels.length; s++) {
+            var els = document.querySelectorAll(sels[s]);
+            for (var i = 0; i < els.length; i++) {
+                var el = els[i];
+                if (el.closest && el.closest('#mp-root')) continue;
+                if (el.offsetParent === null) continue;
+                var t = (el.textContent || '').replace(/\s+/g, ' ').trim();
+                if (t.length < 3 || t.length > 80) continue;
+                if (parseCountdownText(t)) return el;
+            }
+        }
+        return null;
+    }
+
+    // Fallback: t\u00ECm n\u00FAt L4M d\u1EF1a v\u00E0o v\u1ECB tr\u00ED ph\u00EDa tr\u00EAn n\u00FAt \u0111\u1EBFm ng\u01B0\u1EE3c (d\u00F9ng cho n\u00FAt h\u00ECnh "g" kh\u00F4ng c\u00F3 ch\u1EEF "l\u1EA5y m\u00E3")
+    function findL4MByCountdown() {
+        var cdEl = findCountdownElement();
+        if (!cdEl) return null;
+        try {
+            var cr = cdEl.getBoundingClientRect();
+            if (!cr || cr.width === 0 || cr.top < 10) return null;
+            var cx = cr.left + cr.width / 2;
+            var xs = [cx, cx - 30, cx + 30];
+            for (var dy = 12; dy <= 170; dy += 14) {
+                var py = cr.top - dy;
+                if (py < 8) continue;
+                for (var xi = 0; xi < xs.length; xi++) {
+                    try {
+                        var stack = document.elementsFromPoint(xs[xi], py);
+                        for (var i = 0; i < stack.length && i < 6; i++) {
+                            var el = stack[i];
+                            if (!el || el.closest('#mp-root') || el.closest('#mp-fab')) continue;
+                            if (el.offsetParent === null) continue;
+                            var node = el;
+                            for (var d = 0; d < 5 && node && node !== document.body; d++) {
+                                var tag = (node.tagName || '').toLowerCase();
+                                var onclick = node.getAttribute && (node.getAttribute('onclick') || node.getAttribute('onmousedown') || node.getAttribute('ontouchstart') || node.getAttribute('onmouseup'));
+                                var role = node.getAttribute && node.getAttribute('role');
+                                var cur = '';
+                                try { cur = window.getComputedStyle(node).cursor || ''; } catch (e) {}
+                                if (tag === 'a' || tag === 'button' || role === 'button' || onclick || cur === 'pointer') {
+                                    if (node.offsetParent !== null) return node;
+                                }
+                                node = node.parentElement;
+                            }
+                            if ((el.tagName || '').toLowerCase() === 'img' || el.querySelector('img')) return el;
+                        }
+                    } catch (e) {}
+                }
+            }
+        } catch (e) {}
         return null;
     }
 
@@ -1029,6 +1190,8 @@
             var p = findL4MByPoint();
             if (p) return { el: p, type: 'point' };
         }
+        var c = findL4MByCountdown();
+        if (c) return { el: c, type: 'countdown-anchor' };
         return null;
     }
 
@@ -1246,6 +1409,8 @@
         log('Kh\u1EDFi \u0111\u1ED9ng | Host:', HOST, '| State:', st, '| isRealTarget:', isRealTargetPage(), '| Gi\u1EA3m lag:', isLagOn() ? 'B\u1EACT' : 'T\u1EAET');
         refreshStatus();
         addResetButton();
+        try { var _gt = detectGtraffic(); if (_gt) { log('\uD83D\uDC36 Ph\u00E1t hi\u1EC7n GTRAFFIC challenge \u2192 t\u1EF1 solve'); setTimeout(function(){ runGtrafficBypass(false); }, 800); } } catch(e){}
+
 
         if (S.get('code')) showCode(S.get('code'));
 
