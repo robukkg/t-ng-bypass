@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         TAOLAMBYPASS — Auto Update
 // @namespace    taolambypass.auto
-// @version      1.1
+// @version      1.2
 // @description  Tự động bypass gtraffic / link4m / nút G — chạy trên Tampermonkey & Violentmonkey
 // @author       TAOLAMBYPASS
 // @icon         https://files.catbox.moe/mqcwtj.jpg
