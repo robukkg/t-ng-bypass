@@ -4,7 +4,6 @@
 // @version      1.0
 // @description  T\u1EF1 \u0111\u1ED9ng \u0111i\u1EC1n m\u00E3 code khi v\u1EC1 link4m (\u0111\u00E3 fix font + gi\u1EA3m lag)
 // @author       TAOLAMBYPASS
-// @icon.        https://files.catbox.moe/mqcwtj.jpg
 // @match        *://*/*
 // @grant        GM_setValue
 // @grant        GM_getValue
@@ -238,7 +237,7 @@
                     '<div class="mp-flower">\uD83D\uDC36</div>' +
                     '<div class="mp-brand-txt">' +
                         '<div class="mp-title-main">TAOLAMBYPASS</div>' +
-                        '<div class="mp-title-sub">AUTO BYPASS v1.1</div>' +
+                        '<div class="mp-title-sub">AUTO BYPASS v1.2</div>' +
                     '</div>' +
                 '</div>' +
             '</div>' +
@@ -416,6 +415,7 @@
         var m = getBtnMode();
         if (m === 'g') { UI.btnMode.textContent = '\uD83D\uDC36 CH\u1EBF \u0110\u1ED8: N\u00DAT G'; UI.btnMode.className = 'mp-btn blue'; }
         else { UI.btnMode.textContent = '\uD83D\uDC36 CH\u1EBF \u0110\u1ED8: N\u00DAT L\u1EA4Y M\u00C3'; UI.btnMode.className = 'mp-btn green'; }
+        try { if (UI.note) UI.note.textContent = '\uD83D\uDC36 BYPASS ' + getBypassName() + ' | ch\u1EBF: ' + (m === 'g' ? 'N\u00DAT G' : 'N\u00DAT L\u1EA4Y M\u00C3'); } catch (e) {}
     }
 
     function updateLagBtn() {
@@ -438,9 +438,15 @@
         if (/facebook|fb\./.test(h)) return 'FACEBOOK';
         if (/youtube|youtu\.be/.test(h)) return 'YOUTUBE';
         if (/tiktok/.test(h)) return 'TIKTOK';
+        if (/fun88/.test(h)) return 'FUN88';
+        if (/paiway/.test(h)) return 'PAIWAY';
         var parts = h.split('\.');
-        var main = parts.length >= 2 ? parts[parts.length - 2] : parts[0];
-        if (!main) main = h;
+        var skip = {com:1,net:1,org:1,vn:1,co:1,io:1,info:1,me:1,tv:1,cc:1,xyz:1,club:1,online:1,site:1,top:1,shop:1,app:1,dev:1,cloud:1,edu:1,gov:1,mobi:1,asia:1,id:1,my:1,sg:1,uk:1,us:1,eu:1};
+        var main = '';
+        for (var i = parts.length - 1; i >= 0; i--) {
+            if (!skip[parts[i]] && parts[i] !== 'www') { main = parts[i]; break; }
+        }
+        if (!main) main = parts[0] || h;
         return main.toUpperCase();
     }
     function getBtnMode() { try { return S.get('btnMode', 'g'); } catch (e) { return 'g'; } }
@@ -921,7 +927,18 @@
         if (!UI.code) return;
         UI.code.classList.add('show');
         UI.codeVal.textContent = code;
-        try { navigator.clipboard.writeText(code); log('\uD83D\uDC36 \u0110\u00E3 copy code:', code); } catch (e) {}
+        var copied = false;
+        try { navigator.clipboard.writeText(code); copied = true; } catch (e) {}
+        try {
+            var ta = document.createElement('textarea');
+            ta.value = code; ta.style.position = 'fixed'; ta.style.opacity = '0'; ta.style.left = '-9999px';
+            document.body.appendChild(ta); ta.focus(); ta.select();
+            try { document.execCommand('copy'); copied = true; } catch (e2) {}
+            document.body.removeChild(ta);
+        } catch (e3) {}
+        if (copied) log('\uD83D\uDC36 \u2713 \u0110\u00C3 T\u1EF0 \u0110\u1ED8NG SAO CH\u00C9P M\u00C3:', code);
+        else log('\u26A0\uFE0F Kh\u00F4ng copy \u0111\u01B0\u1EE3c, b\u1EA5m tay nha:', code);
+        if (UI.status) UI.status.textContent = '\uD83D\uDC36 C\u00F3 m\u00E3 \u2192 \u0111\u00E3 sao ch\u00E9p!';
     }
 
     var CD_PATTERNS = [
@@ -1065,6 +1082,26 @@
                 return c;
             }
         }
+        // Buoc cuoi: quet cac nut/button co ma alphanumeric 4-10 ky tu (vd: w5WJWdQ4 hien tren nut xanh)
+        // Chi chay khi khong con countdown (da het thoi gian cho)
+        try {
+            var scd = readServerCountdown();
+            if (!scd || scd.sec === 0) {
+                var cands = document.querySelectorAll('button, a, [role="button"], div, span');
+                var skipWords = /^(submit|login|log in|send|ok|next|back|home|menu|close|open|start|stop|play|pause|search|buy|add|cart|like|share|follow|sub|join|get|go|new|old|yes|no|on|off|play|download|upload|view|edit|delete|remove|save|cancel|confirm|accept|decline|skip|done|finish|continue|loading|load|more|less|all|none|help|info|about|contact|settings|profile|account|logout|sign out|register|signup|sign up)$/i;
+                for (var i2 = 0; i2 < cands.length; i2++) {
+                    var b = cands[i2];
+                    if (b.closest && b.closest('#mp-root')) continue;
+                    if (b.offsetParent === null) continue;
+                    var childCount = b.querySelectorAll('*').length;
+                    if (childCount > 2) continue;
+                    var txt = (b.textContent || '').replace(/\s+/g, ' ').trim();
+                    if (!/^[A-Za-z0-9]{4,10}$/.test(txt)) continue;
+                    if (skipWords.test(txt)) continue;
+                    return txt;
+                }
+            }
+        } catch (e) {}
         return null;
     }
 
@@ -1461,7 +1498,7 @@
             else if (isRealTargetPage()) p = handleTarget();
             else if (isGtraffic) p = handleGtraffic();
             else if (isLink4m) p = handleLink4m();
-            else if (freeMode) p = handleFreeClick();
+            else if (freeMode) p = handleTarget();
             else p = Promise.resolve();
             p.catch(function(e){ log('L\u1ED7i:', e.message); }).then(function() {
                 if (getState() === 'done') { loopRunning = false; return; }
@@ -1501,7 +1538,7 @@
         if (isRealTargetPage() && st === 'click-google') {
             setState('scan-click1');
         }
-        if (isGtraffic && (st === 'idle' || st === 'done')) {
+        if ((isGtraffic || freeMode) && (st === 'idle' || st === 'done')) {
             S.del('filled');
             setState('scan-click1');
         }
