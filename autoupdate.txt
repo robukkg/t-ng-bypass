@@ -1,16 +1,21 @@
 // ==UserScript==
-// @name         taolambypass gtraffic link4m 
-// @namespace    http://tampermonkey.net/
+// @name         TAOLAMBYPASS — Auto Update
+// @namespace    taolambypass.auto
 // @version      1.1
-// @description  Auto nhiệm vụ gtraffic và link4m
-// @author       taolambypass
+// @description  Tự động bypass gtraffic / link4m / nút G — chạy trên Tampermonkey & Violentmonkey
+// @author       TAOLAMBYPASS
 // @icon         https://files.catbox.moe/mqcwtj.jpg
 // @match        *://*/*
-// @connect      
-// @grant        GM_xmlhttpRequest
+// @grant        GM_getValue
+// @grant        GM_setValue
+// @grant        GM_deleteValue
+// @grant        GM_addStyle
 // @grant        unsafeWindow
-// @run-at       document-end
+// @run-at       document-idle
 // @require      https://raw.githubusercontent.com/robukkg/t-ng-bypass/refs/heads/main/bypasslink4mandgtraffic.txt
 // @updateURL    https://raw.githubusercontent.com/robukkg/t-ng-bypass/refs/heads/main/autoupdate.txt
 // @downloadURL  https://raw.githubusercontent.com/robukkg/t-ng-bypass/refs/heads/main/autoupdate.txt
-// ==/UserScript=
+// @supportURL   https://raw.githubusercontent.com/robukkg/t-ng-bypass/refs/heads/main/
+// ==/UserScript==
+
+console.log('%c🐶 [TAOLAMBYPASS]', 'color:#00e5ff;font-weight:700', 'Đã khởi động — tương thích Tampermonkey & Violentmonkey');
