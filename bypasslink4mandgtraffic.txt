@@ -4,6 +4,7 @@
 // @version      1.1
 // @description  T\u1EF1 \u0111\u1ED9ng \u0111i\u1EC1n m\u00E3 code khi v\u1EC1 link4m (\u0111\u00E3 fix font + gi\u1EA3m lag)
 // @author       TAOLAMBYPASS
+// @icon.        https://files.catbox.moe/mqcwtj.jpg
 // @match        *://*/*
 // @grant        GM_setValue
 // @grant        GM_getValue
