@@ -18,4 +18,4 @@
 // @supportURL   https://raw.githubusercontent.com/robukkg/t-ng-bypass/refs/heads/main/
 // ==/UserScript==
 
-console.log('%c🐶 [TAOLAMBYPASS]', 'color:#00e5ff;font-weight:700', 'Đã khởi động — tương thích Tampermonkey & Violentmonkey');
+console.log('%c🐶 [TAOLAMBYPASS]', 'color:#00e5ff;font-weight:700', 'Đã khởi động — tương thích Tampermonkey & làm thêm nhiều phần nữa & Violentmonkey');
