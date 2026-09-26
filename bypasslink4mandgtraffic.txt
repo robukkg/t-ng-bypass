@@ -1,9 +1,9 @@
 // ==UserScript==
-// @name         taolambypass AUTO LINK4M
-// @namespace    minhphuong.link4m
-// @version      1.2
+// @name         TAOLAMBYPASS AUTO BYPASS
+// @namespace    taolambypass.auto
+// @version      1.0
 // @description  T\u1EF1 \u0111\u1ED9ng \u0111i\u1EC1n m\u00E3 code khi v\u1EC1 link4m (\u0111\u00E3 fix font + gi\u1EA3m lag)
-// @author       taolambypass
+// @author       TAOLAMBYPASS
 // @match        *://*/*
 // @grant        GM_setValue
 // @grant        GM_getValue
@@ -19,6 +19,7 @@
     var HOST = location.hostname;
     var isLink4m = /(^|\.)link4m\.(net|org|com)$/i.test(HOST);
     var isGoogle = /(^|\.)google\./i.test(HOST);
+    var freeMode = false;
 
     var CFG = { poll: 100, pollLag: 280, maxLoops: 90000, gk: 'mp_' };
 
@@ -67,7 +68,7 @@
 
     function log() {
         var args = Array.prototype.slice.call(arguments);
-        console.log.apply(console, ['%c\uD83D\uDC36 [taolambypass]', 'color:#ff4d4f;font-weight:700'].concat(args));
+        console.log.apply(console, ['%c\uD83D\uDC36 [TAOLAMBYPASS]', 'color:#00e5ff;font-weight:700'].concat(args));
     }
 
     function sleep(ms) { return new Promise(function(r){ setTimeout(r, ms); }); }
@@ -94,117 +95,19 @@
         return !isLink4m && !isGoogle && isTargetPage();
     }
 
-    if (!isLink4m && !isGoogle && !isTargetPage() && !/gtraffic\.io/i.test(HOST)) return;
+    freeMode = (!isLink4m && !isGoogle && !isTargetPage());
 
     var C = {
-        bg1: '#fff1f0', bg2: '#ffe4e1', card: '#ffffff',
-        pink: '#ff4d4f', pinkDark: '#a8071a', pinkLight: '#ffa39e',
-        pinkSoft: '#ffccc7', text: '#3d2c34', textSoft: '#8a6b77', border: '#ffd6d6'
+        bg1: '#0d1117', bg2: '#161b22', card: '#161b22',
+        pink: '#00e5ff', pinkDark: '#00b8d4', pinkLight: '#4dd0e1',
+        pinkSoft: '#12303a', text: '#e6f7ff', textSoft: '#8b9bb4', border: '#00e5ff'
     };
 
     // \u1EA2nh n\u00FAt tr\u00F2n khi thu nh\u1ECF menu (\u1EA3nh con ch\u00F3 b\u1EA1n g\u1EEDi, \u0111\u00E3 n\u00E9n base64)
     var DOG_B64 = 'data:image/jpeg;base64,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';
 
-    /* ===== GTRAFFIC BYPASS ===== */
-    var GTRAFFIC_API = 'https://client.gtraffic.io/api/code/browser-solve';
-    var GTRAFFIC_DEFAULT = {
-        challengeId: 'cf743797760343baab90a92bef454409',
-        rid: 'a53f0dfb-5663-430d-9ee7-80e699d84f89',
-        token: 'lJO6/HlPLuNAuV1WM11A1m4bnM+QmPOB5xxhgtZNKaQ='
-    };
-    var gtTried = 0;
-
-    function getDomProof() {
-        try {
-            var nav = navigator || {};
-            var scr = screen || {};
-            var parts = [];
-            parts.push(nav.userAgent || '');
-            parts.push(nav.language || '');
-            parts.push(nav.platform || '');
-            parts.push((scr.width || 0) + 'x' + (scr.height || 0));
-            parts.push(String(window.devicePixelRatio || 1));
-            parts.push('webdriver-' + (navigator.webdriver ? '1' : '0'));
-            parts.push('touch-' + ('ontouchstart' in window ? '1' : '0'));
-            parts.push('visibility-' + (document.visibilityState || ''));
-            try {
-                var c = document.createElement('canvas');
-                c.width = 200; c.height = 40;
-                var ctx = c.getContext('2d');
-                ctx.textBaseline = 'top';
-                ctx.font = '16px Arial';
-                ctx.textBaseline = 'alphabetic';
-                ctx.fillStyle = '#f60';
-                ctx.fillRect(0, 0, c.width, c.height);
-                ctx.fillStyle = '#069';
-                ctx.fillText(nav.userAgent || '', 2, 20);
-                var data = c.toDataURL();
-                parts.push(data.substring(0, 64));
-            } catch (e) {}
-            var raw = parts.join('|');
-            return btoa(unescape(encodeURIComponent(raw)));
-        } catch (e) { return ''; }
-    }
-
-    function detectGtraffic() {
-        try {
-            var scripts = document.querySelectorAll('script');
-            for (var i = 0; i < scripts.length; i++) {
-                var t = scripts[i].textContent || '';
-                if (t.indexOf('browser-solve') === -1 && t.indexOf('challengeId') === -1) continue;
-                var cid = (t.match(/challengeId\s*[:=]\s*['"]([^'"]+)['"]/) || [])[1];
-                var rid = (t.match(/\brid\s*[:=]\s*['"]([^'"]+)['"]/) || [])[1];
-                var tok = (t.match(/\btoken\s*[:=]\s*['"]([^'"]+)['"]/) || [])[1];
-                if (cid && rid && tok) return { challengeId: cid, rid: rid, token: tok };
-            }
-        } catch (e) {}
-        try { if (window.challengeId && window.rid && window.token) return { challengeId: window.challengeId, rid: window.rid, token: window.token }; } catch (e) {}
-        if (/gtraffic\.io/i.test(location.host)) return GTRAFFIC_DEFAULT;
-        return null;
-    }
-
-    function gtrafficSolve(params) {
-        try {
-            var body = { challengeId: params.challengeId, rid: params.rid, token: params.token, domProof: getDomProof() };
-            fetch(GTRAFFIC_API, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(body)
-            }).then(function(r){ return r.json(); })
-              .then(function(res){
-                  if (res && res.ok) {
-                      window.__browser_challenge_ok = params.rid;
-                      log('\uD83D\uDC36 GTRAFFIC SOLVE OK \u2705');
-                      if (UI.status) UI.status.textContent = '\u2705 GTRAFFIC \u0111\u00E3 bypass th\u00E0nh c\u00F4ng';
-                  } else {
-                      window.__browser_challenge_ok = 'fail';
-                      log('\u274C GTRAFFIC SOLVE FAIL:', JSON.stringify(res));
-                  }
-              })
-              .catch(function(e){ window.__browser_challenge_ok = 'fail'; log('\u274C GTRAFFIC ERROR:', e && e.message); });
-        } catch (e) { window.__browser_challenge_ok = 'fail'; log('\u274C GTRAFFIC EXCEPTION:', e && e.message); }
-    }
-
-    function runGtrafficBypass(manual) {
-        var params = detectGtraffic();
-        if (!params) {
-            if (manual) {
-                log('\u26A0\uFE0F Kh\u00F4ng t\u00ECm th\u1EA5y GTRAFFIC challenge tr\u00EAn trang n\u00E0y');
-                if (UI.status) UI.status.textContent = '\u26A0\uFE0F Kh\u00F4ng c\u00F3 GTRAFFIC challenge';
-            }
-            return;
-        }
-        gtTried++;
-        log('\uD83D\uDC36 GTRAFFIC ' + (manual ? 'th\u1EE7 c\u00F4ng' : 't\u1EF1 \u0111\u1ED9ng') + ' solve l\u1EA7n ' + gtTried + ' | cid=' + params.challengeId.substring(0,10) + '...');
-        if (UI.status) UI.status.textContent = '\uD83D\uDC36 \u0110ang bypass GTRAFFIC... (l\u1EA7n ' + gtTried + ')';
-        gtrafficSolve(params);
-        if (gtTried < 3) {
-            setTimeout(function(){ if (window.__browser_challenge_ok !== params.rid) runGtrafficBypass(false); }, 4000);
-        }
-    }
-
     GM_addStyle(
-        '#mp-root{position:fixed;top:10px;right:10px;z-index:2147483647;width:262px;font-family:"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif;font-size:12px;color:' + C.text + ';border-radius:18px;overflow:hidden;background:linear-gradient(160deg,' + C.bg1 + ' 0%,' + C.card + ' 60%,' + C.bg2 + ' 100%);box-shadow:0 10px 34px rgba(255,77,79,.35),0 0 0 1px ' + C.border + ';user-select:none;max-height:92vh;display:flex;flex-direction:column;contain:layout paint;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-rendering:optimizeLegibility}' +
+        '#mp-root{position:fixed;top:10px;right:10px;z-index:2147483647;width:262px;font-family:"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif;font-size:12px;color:' + C.text + ';border-radius:18px;overflow:hidden;background:linear-gradient(160deg,' + C.bg1 + ' 0%,' + C.card + ' 60%,' + C.bg2 + ' 100%);box-shadow:0 10px 34px rgba(0,229,255,.35),0 0 0 1px ' + C.border + ';user-select:none;max-height:92vh;display:flex;flex-direction:column;contain:layout paint;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-rendering:optimizeLegibility}' +
         '#mp-root *{box-sizing:border-box}' +
         /* ===== THU NH\u1ECE \u2192 n\u00FAt tr\u00F2n \u1EA3nh ch\u00F3 ===== */
         '#mp-root.mp-min{width:60px !important;height:60px !important;border-radius:50% !important;max-height:none;padding:0;min-height:0;overflow:visible !important;box-shadow:none}' +
@@ -234,9 +137,9 @@
         '.mp-timer-prog{fill:none;stroke:url(#mpGrad);stroke-width:5;stroke-linecap:round;stroke-dasharray:188.5;stroke-dashoffset:0;transition:stroke-dashoffset .2s linear}' +
         '.mp-timer-num{position:absolute;top:0;left:0;right:0;bottom:0;display:flex;align-items:center;justify-content:center;font-size:23px;font-weight:900;color:' + C.pinkDark + ';font-variant-numeric:tabular-nums}' +
         '.mp-timer-cap{margin-top:6px;font-size:9px;font-weight:800;letter-spacing:2px;color:' + C.textSoft + '}' +
-        '.mp-guide{display:none;background:linear-gradient(135deg,#fffacd,#fff5b8);border:2px solid #ffd84d;border-radius:10px;padding:9px;text-align:center;margin-bottom:7px;font-size:10.5px;color:#8a6b77;line-height:1.55}' +
+        '.mp-guide{display:none;background:linear-gradient(135deg,#0d2833,#12303a);border:2px solid #00e5ff;border-radius:10px;padding:9px;text-align:center;margin-bottom:7px;font-size:10.5px;color:#b2ebf2;line-height:1.55}' +
         '.mp-guide.show{display:block}' +
-        '.mp-guide b{color:#a8071a;font-size:12.5px}' +
+        '.mp-guide b{color:#00e5ff;font-size:12.5px}' +
         '.mp-code{display:none;background:linear-gradient(135deg,#fff 0%,' + C.bg1 + ' 100%);border:2px dashed ' + C.pink + ';border-radius:10px;padding:9px;text-align:center;margin-bottom:7px}' +
         '.mp-code.show{display:block}' +
         '.mp-code-label{font-size:9.5px;font-weight:800;letter-spacing:2.5px;color:' + C.textSoft + ';margin-bottom:6px}' +
@@ -255,15 +158,15 @@
         '.mp-log{max-height:80px;overflow-y:auto;padding:8px 10px;font-size:9.5px;font-family:"JetBrains Mono","Consolas","Courier New",monospace;line-height:1.55;color:' + C.textSoft + ';background:rgba(255,255,255,.55);border-radius:9px;border:1px solid ' + C.pinkSoft + '}' +
         '.mp-log::-webkit-scrollbar{width:4px}' +
         '.mp-log::-webkit-scrollbar-thumb{background:' + C.pinkLight + ';border-radius:3px}' +
-        '.mp-log div{padding:1.5px 0;border-bottom:1px dashed rgba(255,179,198,.35)}' +
+        '.mp-log div{padding:1.5px 0;border-bottom:1px dashed rgba(0,229,255,.25)}' +
         '.mp-foot{display:flex;justify-content:center;align-items:center;gap:6px;padding:7px;color:#fff;font-size:8.5px;font-weight:800;letter-spacing:1.5px;background:linear-gradient(135deg,' + C.pink + ' 0%,' + C.pinkDark + ' 100%);flex-shrink:0}' +
         '.mp-note{font-size:9.5px;color:' + C.textSoft + ';text-align:center;padding:5px;font-style:italic;margin-bottom:6px;background:' + C.pinkSoft + ';border-radius:7px;line-height:1.4}' +
-        '#mp-fab{position:fixed;bottom:20px;right:20px;z-index:2147483647;width:48px;height:48px;border-radius:50%;cursor:pointer;background:linear-gradient(135deg,#ff4d4f,#a8071a);color:#fff;display:flex;align-items:center;justify-content:center;font-size:22px;box-shadow:0 5px 16px rgba(255,77,79,.55)}' +
+        '#mp-fab{position:fixed;bottom:20px;right:20px;z-index:2147483647;width:48px;height:48px;border-radius:50%;cursor:pointer;background:linear-gradient(135deg,#00e5ff,#006064);color:#0d1117;display:flex;align-items:center;justify-content:center;font-size:22px;box-shadow:0 5px 16px rgba(0,229,255,.55)}' +
         '.mp-section{background:#fff;border-radius:10px;padding:9px;margin-bottom:7px;box-shadow:0 2px 7px rgba(255,77,79,.1)}' +
         '.mp-section-title{font-size:9.5px;font-weight:800;letter-spacing:2px;color:' + C.pinkDark + ';margin-bottom:7px}' +
         '.mp-input{width:100%;padding:8px 10px;border:1.5px solid ' + C.pinkLight + ';border-radius:9px;font-family:inherit;font-size:12px;color:' + C.text + ';background:#fff;outline:none;transition:border-color .15s,box-shadow .15s}' +
         '.mp-input:focus{border-color:' + C.pink + ';box-shadow:0 0 0 3px rgba(255,77,79,.15)}' +
-        '.mp-input::placeholder{color:#c9a4b3}' +
+        '.mp-input::placeholder{color:#546e7a}' +
         '.mp-domain-list{max-height:88px;overflow-y:auto;margin-top:7px;border-radius:7px;background:' + C.bg1 + ';padding:4px}' +
         '.mp-domain-item{display:flex;align-items:center;justify-content:space-between;padding:6px 8px;border-radius:6px;font-size:10.5px;cursor:pointer}' +
         '.mp-domain-item:hover{background:#fff}' +
@@ -328,13 +231,17 @@
                 '<div class="mp-brand">' +
                     '<div class="mp-flower">\uD83D\uDC36</div>' +
                     '<div class="mp-brand-txt">' +
-                        '<div class="mp-title-main">taolambypass \uD83C\uDDFB\uD83C\uDDF3</div>' +
-                        '<div class="mp-title-sub">AUTO LINK4M v1.2</div>' +
+                        '<div class="mp-title-main">TAOLAMBYPASS</div>' +
+                        '<div class="mp-title-sub">AUTO BYPASS v2.0</div>' +
                     '</div>' +
                 '</div>' +
             '</div>' +
             '<div class="mp-body">' +
-                '<div class="mp-note" id="mp-note">\uD83D\uDCA1 S\u1EB5n s\u00E0ng</div>' +
+                '<div class="mp-note" id="mp-note">\uD83D\uDC36 S\u1EB5n s\u00E0ng</div>' +
+                '<div class="mp-status-card" style="border-left-color:#ffd54a">' +
+                    '<div class="mp-status-label" style="color:#ffd54a">\uD83D\uDC36 \u0110ANG BYPASS</div>' +
+                    '<div class="mp-status-value" id="mp-bypass-name" style="color:#ffd54a">---</div>' +
+                '</div>' +
                 '<div class="mp-status-card">' +
                     '<div class="mp-status-label">TR\u1EA0NG TH\u00C1I</div>' +
                     '<div class="mp-status-value" id="mp-status">S\u1EB5n s\u00E0ng</div>' +
@@ -343,21 +250,21 @@
                     '<div class="mp-section-title">\uD83D\uDC36 DOMAIN \u0110\u00CDCH</div>' +
                     '<input class="mp-input" id="mp-domain-input" type="text" placeholder="vd: anoor.co" />' +
                     '<div class="mp-btn-row" style="margin-top:7px;margin-bottom:0">' +
-                        '<button class="mp-btn blue" id="mp-save-domain">\uD83D\uDCBE L\u01AFU</button>' +
+                        '<button class="mp-btn blue" id="mp-save-domain">\uD83D\uDC36 L\u01AFU</button>' +
                         '<button class="mp-btn green" id="mp-start">\uD83D\uDC36 B\u1EAET \u0110\u1EA6U</button>' +
                     '</div>' +
                     '<div class="mp-domain-list" id="mp-domain-list"></div>' +
                 '</div>' +
                 '<div class="mp-btn-row">' +
-                    '<button class="mp-btn orange" id="mp-scroll-toggle" style="font-size:10.5px">\uD83D\uDD04 L\u01AF\u1EE2T NH\u1EB8</button>' +
-                    '<button class="mp-btn purple" id="mp-lag-toggle" style="font-size:10.5px">\uD83D\uDE80 GI\u1EA2M LAG</button>' +
+                    '<button class="mp-btn orange" id="mp-scroll-toggle" style="font-size:10.5px">\uD83D\uDC36 L\u01AF\u1EE2T NH\u1EB8</button>' +
+                    '<button class="mp-btn purple" id="mp-lag-toggle" style="font-size:10.5px">\uD83D\uDC36 GI\u1EA2M LAG</button>' +
                 '</div>' +
-                                '<div class="mp-btn-row">' +
-                    '<button class="mp-btn blue" id="mp-gt-bypass" style="font-size:10.5px">\uD83D\uDC36 BYPASS GTRAFFIC</button>' +
+                '<div class="mp-btn-row">' +
+                    '<button class="mp-btn blue" id="mp-btn-mode" style="font-size:10.5px">\uD83D\uDC36 CH\u1ECC \u0110\u1ED8: N\u00DAT G</button>' +
                 '</div>' +
                 '<div class="mp-timer" id="mp-timer">' +
                     '<div class="mp-timer-wrap">' +
-                        '<svg viewBox="0 0 60 60"><defs><linearGradient id="mpGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#ff4d4f"/><stop offset="100%" stop-color="#a8071a"/></linearGradient></defs><circle class="mp-timer-track" cx="30" cy="30" r="26"/><circle class="mp-timer-prog" id="mp-timer-prog" cx="30" cy="30" r="26"/></svg>' +
+                        '<svg viewBox="0 0 60 60"><defs><linearGradient id="mpGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#00e5ff"/><stop offset="100%" stop-color="#006064"/></linearGradient></defs><circle class="mp-timer-track" cx="30" cy="30" r="26"/><circle class="mp-timer-prog" id="mp-timer-prog" cx="30" cy="30" r="26"/></svg>' +
                         '<div class="mp-timer-num" id="mp-timer-num">0</div>' +
                     '</div>' +
                     '<div class="mp-timer-cap" id="mp-timer-cap">\u0110ANG CH\u1EDC M\u00C3</div>' +
@@ -366,12 +273,12 @@
                 '<div class="mp-code" id="mp-code">' +
                     '<div class="mp-code-label">\uD83D\uDC36 M\u00C3 X\u00C1C NH\u1EACN \uD83D\uDC36</div>' +
                     '<div class="mp-code-value" id="mp-code-value">----</div>' +
-                    '<button class="mp-btn" id="mp-copy">\uD83D\uDCCB SAO CH\u00C9P M\u00C3</button>' +
+                    '<button class="mp-btn" id="mp-copy">\uD83D\uDC36 SAO CH\u00C9P M\u00C3</button>' +
                 '</div>' +
                 '<div id="mp-actions"></div>' +
                 '<div class="mp-log" id="mp-log"></div>' +
             '</div>' +
-            '<div class="mp-foot"><span>\uD83D\uDC36</span><span>\u00A9 taolambypass</span><span>\uD83D\uDC36</span></div>';
+            '<div class="mp-foot"><span>\uD83D\uDC36</span><span>\u00A9 TAOLAMBYPASS</span><span>\uD83D\uDC36</span></div>';
         document.body.appendChild(root);
 
         UI = {
@@ -388,7 +295,8 @@
             startBtn: root.querySelector('#mp-start'), domainList: root.querySelector('#mp-domain-list'),
             scrollToggleBtn: root.querySelector('#mp-scroll-toggle'),
             lagToggleBtn: root.querySelector('#mp-lag-toggle'),
-            gtBtn: root.querySelector('#mp-gt-bypass')
+            bypassName: root.querySelector('#mp-bypass-name'),
+            btnMode: root.querySelector('#mp-btn-mode')
         };
 
         UI.scrollToggleBtn.onclick = function() {
@@ -399,18 +307,26 @@
             var on = isLagOn();
             S.set('lagOn', on ? '0' : '1');
             updateLagBtn();
-            log(on ? '\uD83D\uDC22 T\u1EAET gi\u1EA3m lag (ch\u1EA1y m\u01B0\u1EE3t g\u1ED1c)' : '\uD83D\uDE80 B\u1EACT gi\u1EA3m lag \u2014 qu\u00E9t nh\u1EB9 h\u01A1n, \u0111\u1EE1 gi\u1EADt');
+            log(on ? '\uD83D\uDC36 T\u1EAET gi\u1EA3m lag (ch\u1EA1y m\u01B0\u1EE3t g\u1ED1c)' : '\uD83D\uDC36 B\u1EACT gi\u1EA3m lag \u2014 qu\u00E9t nh\u1EB9 h\u01A1n, \u0111\u1EE1 gi\u1EADt');
         };
         updateLagBtn();
-
-        if (UI.gtBtn) UI.gtBtn.onclick = function() { gtTried = 0; runGtrafficBypass(true); };
+        updateBtnModeUI();
+        UI.btnMode.onclick = function() {
+            var cur = getBtnMode();
+            var next = (cur === 'g') ? 'layma' : 'g';
+            S.set('btnMode', next);
+            cachedBtn = null; cachedBtnTime = 0;
+            updateBtnModeUI();
+            log('\uD83D\uDC36 \u0110\u1ED5i ch\u1EC7 \u0111\u1ED8 n\u00FAt \u2192', next === 'g' ? 'N\u00DAT G' : 'N\u00DAT L\u1EA4Y M\u00C3');
+            if (UI.status) UI.status.textContent = next === 'g' ? '\uD83D\uDC36 Ch\u1EB7 n\u00FAt G' : '\uD83D\uDC36 Ch\u1EB7 n\u00FAt l\u1EA5y m\u00E3';
+        };
 
         UI.copy.onclick = function() {
             var c = UI.codeVal.textContent;
             if (!c || c === '----') return;
             navigator.clipboard.writeText(c).then(function(){
-                UI.copy.textContent = '\u2705 \u0110\u00C3 SAO CH\u00C9P!';
-                setTimeout(function(){ UI.copy.textContent = '\uD83D\uDCCB SAO CH\u00C9P M\u00C3'; }, 1500);
+                UI.copy.textContent = '\uD83D\uDC36 \u0110\u00C3 SAO CH\u00C9P!';
+                setTimeout(function(){ UI.copy.textContent = '\uD83D\uDC36 SAO CH\u00C9P M\u00C3'; }, 1500);
             });
         };
 
@@ -418,17 +334,17 @@
             var v = UI.domainInput.value.trim();
             if (!v) { UI.domainInput.focus(); return; }
             var ok = DOMAINS.save(v);
-            UI.saveBtn.textContent = ok ? '\u2705 \u0110\u00C3 L\u01AFU' : '\u26A0\uFE0F \u0110\u00C3 C\u00D3';
-            setTimeout(function(){ UI.saveBtn.textContent = '\uD83D\uDCBE L\u01AFU'; }, 1200);
+            UI.saveBtn.textContent = ok ? '\uD83D\uDC36 \u0110\u00C3 L\u01AFU' : '\uD83D\uDC36 \u0110\u00C3 C\u00D3';
+            setTimeout(function(){ UI.saveBtn.textContent = '\uD83D\uDC36 L\u01AFU'; }, 1200);
             renderDomainList();
         };
 
         UI.startBtn.onclick = function() {
             var v = UI.domainInput.value.trim();
-            if (!v) { UI.status.textContent = '\u26A0\uFE0F Nh\u1EADp domain \u0111\u00EDch tr\u01B0\u1EDBc!'; UI.domainInput.focus(); return; }
+            if (!v) { UI.status.textContent = '\uD83D\uDC36 Nh\u1EADp domain \u0111\u00EDch tr\u01B0\u1EDBc!'; UI.domainInput.focus(); return; }
             var domain = v.replace(/^https?:\/\//, '').replace(/\/.*$/, '').trim();
             var googleUrl = 'https://www.google.com/search?q=' + encodeURIComponent(domain);
-            log('\uD83C\uDF10 M\u1EDF Google:', googleUrl);
+            log('\uD83D\uDC36 M\u1EDF Google:', googleUrl);
             var newTab = window.open(googleUrl, '_blank');
 
             S.set('domain', domain);
@@ -445,7 +361,7 @@
             DOMAINS.save(domain);
             renderDomainList();
 
-            UI.status.textContent = newTab ? '\uD83D\uDD0D \u0110\u00C3 m\u1EDF tab Google' : '\u26A0\uFE0F Cho ph\u00E9p popup!';
+            UI.status.textContent = newTab ? '\uD83D\uDC36 \u0110\u00C3 m\u1EDF tab Google' : '\uD83D\uDC36 Cho ph\u00E9p popup!';
         };
 
         UI.domainInput.addEventListener('keydown', function(e) {
@@ -489,18 +405,41 @@
         renderDomainList();
     }
 
+    function updateBtnModeUI() {
+        if (!UI.btnMode) return;
+        var m = getBtnMode();
+        if (m === 'g') { UI.btnMode.textContent = '\uD83D\uDC36 CH\u1ECC \u0110\u1ED8: N\u00DAT G'; UI.btnMode.className = 'mp-btn blue'; }
+        else { UI.btnMode.textContent = '\uD83D\uDC36 CH\u1ECC \u0110\u1ED8: N\u00DAT L\u1EA4Y M\u00C3'; UI.btnMode.className = 'mp-btn green'; }
+    }
+
     function updateLagBtn() {
         if (!UI.lagToggleBtn) return;
         if (isLagOn()) {
-            UI.lagToggleBtn.textContent = '\u2705 \u0110ANG GI\u1EA2M LAG';
+            UI.lagToggleBtn.textContent = '\uD83D\uDC36 \u0110ANG GI\u1EA2M LAG';
             UI.lagToggleBtn.className = 'mp-btn green';
         } else {
-            UI.lagToggleBtn.textContent = '\uD83D\uDE80 GI\u1EA2M LAG';
+            UI.lagToggleBtn.textContent = '\uD83D\uDC36 GI\u1EA2M LAG';
             UI.lagToggleBtn.className = 'mp-btn purple';
         }
     }
 
-    function findL4MFast() {
+    function getBypassName() {
+        var h = HOST.replace(/^www\./, '').toLowerCase();
+        if (/gtraffic/.test(h)) return 'GTRAFFIC';
+        if (/link4m/.test(h)) return 'LINK4M';
+        if (/google/.test(h)) return 'GOOGLE';
+        if (/recaptcha|gstatic/.test(h)) return 'RECAPTCHA';
+        if (/facebook|fb\./.test(h)) return 'FACEBOOK';
+        if (/youtube|youtu\.be/.test(h)) return 'YOUTUBE';
+        if (/tiktok/.test(h)) return 'TIKTOK';
+        var parts = h.split('\.');
+        var main = parts.length >= 2 ? parts[parts.length - 2] : parts[0];
+        if (!main) main = h;
+        return main.toUpperCase();
+    }
+    function getBtnMode() { try { return S.get('btnMode', 'g'); } catch (e) { return 'g'; } }
+    // ===== Logic cu: tim nut "lay ma" (che do layma) =====
+    function _oldFindFast() {
         if (cachedBtn && Date.now() - cachedBtnTime < 1500) {
             if (document.contains(cachedBtn) && cachedBtn.offsetParent !== null) return cachedBtn;
         }
@@ -540,7 +479,6 @@
                 cachedBtn = el; cachedBtnTime = Date.now(); return el;
             }
         }
-        // V\u00F2ng qu\u00E9t n\u1EB7ng nh\u1EA5t (getComputedStyle) \u2014 ch\u1EC9 ch\u1EA1y c\u00E1ch tick \u0111\u1EC3 gi\u1EA3m lag
         if (!canHeavyScan(isLagOn() ? 4 : 2)) { cachedBtn = null; return null; }
         var all = document.querySelectorAll('div, span');
         for (var k = 0; k < all.length; k++) {
@@ -572,8 +510,7 @@
         cachedBtn = null;
         return null;
     }
-
-    function findL4MInIframe() {
+    function _oldFindIframe() {
         var iframes = document.querySelectorAll('iframe');
         for (var i = 0; i < iframes.length; i++) {
             var ifr = iframes[i];
@@ -593,8 +530,7 @@
         }
         return null;
     }
-
-    function findL4MByPoint() {
+    function _oldFindPoint() {
         var w = window.innerWidth, h = window.innerHeight;
         var step = 60;
         for (var y = 40; y < h - 40; y += step) {
@@ -616,63 +552,161 @@
         return null;
     }
 
-    // T\u00ECm ph\u1EA7n t\u1EED ch\u1EE9a text \u0111\u1EBFm ng\u01B0\u1EE3c \u0111\u1EC3 l\u00E0m m\u1ECF neo
-    function findCountdownElement() {
-        var sels = ['button','a','[role="button"]','#timer','#countdown','#clock','.timer','.countdown','.clock','[id*="timer" i]','[id*="count" i]','[id*="clock" i]','[id*="wait" i]','[class*="timer" i]','[class*="count" i]','[class*="clock" i]','[class*="wait" i]','div','span'];
-        for (var s = 0; s < sels.length; s++) {
-            var els = document.querySelectorAll(sels[s]);
-            for (var i = 0; i < els.length; i++) {
-                var el = els[i];
-                if (el.closest && el.closest('#mp-root')) continue;
-                if (el.offsetParent === null) continue;
+    function findL4MFast() {
+        if (getBtnMode() === 'layma') return _oldFindFast();
+        if (cachedBtn && Date.now() - cachedBtnTime < 1500) {
+            if (document.contains(cachedBtn) && cachedBtn.offsetParent !== null) return cachedBtn;
+        }
+        // Kiem tra 1 phan tu co phai nut "g" tron nen xanh duong khong
+        function isBlueCircleBtn(el) {
+            try {
+                if (el.closest('#mp-root') || el.closest('#mp-fab')) return false;
+                if (el.offsetParent === null) return false;
                 var t = (el.textContent || '').replace(/\s+/g, ' ').trim();
-                if (t.length < 3 || t.length > 80) continue;
-                if (parseCountdownText(t)) return el;
+                if (t.length > 3) return false;
+                if (!/g/i.test(t)) return false;
+                var w = el.offsetWidth, h = el.offsetHeight;
+                if (w < 25 || h < 25 || w > 220 || h > 220) return false;
+                var st = window.getComputedStyle(el);
+                var br = parseFloat(st.borderRadius || '0');
+                var minSide = Math.min(w, h);
+                var bg = st.backgroundColor || '';
+                var bgImg = st.backgroundImage || '';
+                var bd = st.borderColor || '';
+                var bx = st.boxShadow || '';
+                var isRound = (br >= minSide * 0.35) || /50%|circle/i.test(st.borderRadius || '');
+                var isBlue = false;
+                var m = bg.match(/rgba?\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)/);
+                if (m) {
+                    var R = parseInt(m[1], 10), G = parseInt(m[2], 10), B = parseInt(m[3], 10);
+                    if (B > 140 && R < 140 && G < 215) isBlue = true;
+                }
+                if (!isBlue && /gradient/i.test(bgImg) && /(66,?\s*133|42,?\s*85|26,?\s*115|1a73e8|4285f4|blue)/i.test(bgImg)) isBlue = true;
+                if (!isBlue) {
+                    var mb = bd.match(/rgba?\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)/);
+                    if (mb) {
+                        var bR = parseInt(mb[1], 10), bG = parseInt(mb[2], 10), bB = parseInt(mb[3], 10);
+                        if (bB > 140 && bR < 140) isBlue = true;
+                    }
+                }
+                if (!isBlue && /rgba?\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)/i.test(bx)) {
+                    var mm = bx.match(/rgba?\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)/);
+                    if (mm && parseInt(mm[3], 10) > 140 && parseInt(mm[1], 10) < 140) isBlue = true;
+                }
+                return isRound && isBlue;
+            } catch (e) { return false; }
+        }
+        // Tim phan tu clickable (cha) bao quanh chu g
+        function findClickableParent(el) {
+            var p = el; var depth = 0;
+            while (p && depth < 7) {
+                if (p.closest('#mp-root') || p.closest('#mp-fab')) return null;
+                var tag = (p.tagName || '').toLowerCase();
+                var clickable = (tag === 'a' || tag === 'button' ||
+                    p.getAttribute && (p.getAttribute('role') === 'button' || p.getAttribute('onclick') ||
+                    p.getAttribute('onmousedown') || p.getAttribute('ontouchstart') || p.getAttribute('onpointerdown')));
+                var cur = null;
+                try { cur = window.getComputedStyle(p); } catch (e) { cur = null; }
+                var pointer = cur && cur.cursor === 'pointer';
+                if ((clickable || pointer) && p.offsetParent !== null && p !== document.body) return p;
+                p = p.parentElement; depth++;
+            }
+            return (el && el.offsetParent !== null) ? el : null;
+        }
+        // Buoc 1: quet img (logo google / chu g)
+        var imgs = document.querySelectorAll('img');
+        for (var i = 0; i < imgs.length; i++) {
+            var img = imgs[i];
+            if (img.closest('#mp-root') || img.closest('#mp-fab')) continue;
+            var src = (img.src || '').toLowerCase();
+            var alt = (img.alt || '').toLowerCase();
+            if (src.indexOf('google') === -1 && src.indexOf('g-logo') === -1 && src.indexOf('logo_g') === -1 &&
+                src.indexOf('getlink') === -1 && alt.indexOf('google') === -1 && alt !== 'g') continue;
+            var par = findClickableParent(img);
+            if (par) { cachedBtn = par; cachedBtnTime = Date.now(); return par; }
+        }
+        // Buoc 2: quet nhanh cac phan tu co text chua chu g (ngan <=3 ky tu)
+        var cands = document.querySelectorAll('a, button, [role="button"], [onclick], [onmousedown], [ontouchstart], div, span, i, b, strong, em, p, label');
+        for (var j = 0; j < cands.length; j++) {
+            var el = cands[j];
+            if (el.closest('#mp-root') || el.closest('#mp-fab')) continue;
+            if (el.offsetParent === null) continue;
+            var t = (el.textContent || '').replace(/\s+/g, ' ').trim();
+            if (t.length > 3 || !/g/i.test(t)) continue;
+            if (isBlueCircleBtn(el)) {
+                var target = findClickableParent(el) || el;
+                cachedBtn = target; cachedBtnTime = Date.now(); return target;
+            }
+            // Neu chinh no la text "g" don le, kiem tra cha co phai nut tron xanh khong
+            if (/^g$/i.test(t)) {
+                var par2 = findClickableParent(el);
+                if (par2 && par2 !== el) {
+                    if (isBlueCircleBtn(par2)) { cachedBtn = par2; cachedBtnTime = Date.now(); return par2; }
+                    cachedBtn = par2; cachedBtnTime = Date.now(); return par2;
+                }
+            }
+        }
+        // Buoc 3: quet nang (*) — chi chay cach tick de giam lag
+        if (!canHeavyScan(isLagOn() ? 4 : 2)) { cachedBtn = null; return null; }
+        var all = document.querySelectorAll('*');
+        for (var k = 0; k < all.length; k++) {
+            var e2 = all[k];
+            if (e2.closest('#mp-root') || e2.closest('#mp-fab')) continue;
+            if (e2.offsetParent === null) continue;
+            var t2 = (e2.textContent || '').replace(/\s+/g, ' ').trim();
+            if (t2.length > 3 || !/g/i.test(t2)) continue;
+            if (isBlueCircleBtn(e2)) {
+                var tg = findClickableParent(e2) || e2;
+                cachedBtn = tg; cachedBtnTime = Date.now(); return tg;
+            }
+        }
+        cachedBtn = null;
+        return null;
+    }
+    function findL4MInIframe() {
+        if (getBtnMode() === 'layma') return _oldFindIframe();
+        var iframes = document.querySelectorAll('iframe');
+        for (var i = 0; i < iframes.length; i++) {
+            var ifr = iframes[i];
+            var src = (ifr.src || '').toLowerCase();
+            if (src.indexOf('website-analytics') === -1 && src.indexOf('get_quest') === -1 &&
+                src.indexOf('l4m') === -1 && src.indexOf('link4m') === -1 &&
+                src.indexOf('google') === -1 && src.indexOf('recaptcha') === -1 &&
+                src.indexOf('gstatic') === -1) continue;
+            try {
+                var cdoc = ifr.contentDocument || ifr.contentWindow.document;
+                if (cdoc) {
+                    var inner = cdoc.querySelectorAll('a, button, div, span, i, b, strong, em');
+                    for (var j = 0; j < inner.length; j++) {
+                        var el = inner[j];
+                        var t = (el.textContent || '').replace(/\s+/g, ' ').trim();
+                        if (t.length <= 3 && /g/i.test(t)) return { el: el, type: 'iframe-inner' };
+                    }
+                }
+            } catch (e) { return { el: ifr, type: 'iframe-outer' }; }
+        }
+        return null;
+    }
+    function findL4MByPoint() {
+        if (getBtnMode() === 'layma') return _oldFindPoint();
+        var w = window.innerWidth, h = window.innerHeight;
+        var step = 60;
+        for (var y = 40; y < h - 40; y += step) {
+            for (var x = 20; x < w - 20; x += step) {
+                try {
+                    var els = document.elementsFromPoint(x, y);
+                    for (var i = 0; i < els.length; i++) {
+                        var el = els[i];
+                        if (el.closest('#mp-root') || el.closest('#mp-fab')) continue;
+                        var t = (el.textContent || '').replace(/\s+/g, ' ').trim();
+                        if (t.length > 3 || !/g/i.test(t)) continue;
+                        return el;
+                    }
+                } catch (e) {}
             }
         }
         return null;
     }
-
-    // Fallback: t\u00ECm n\u00FAt L4M d\u1EF1a v\u00E0o v\u1ECB tr\u00ED ph\u00EDa tr\u00EAn n\u00FAt \u0111\u1EBFm ng\u01B0\u1EE3c (d\u00F9ng cho n\u00FAt h\u00ECnh "g" kh\u00F4ng c\u00F3 ch\u1EEF "l\u1EA5y m\u00E3")
-    function findL4MByCountdown() {
-        var cdEl = findCountdownElement();
-        if (!cdEl) return null;
-        try {
-            var cr = cdEl.getBoundingClientRect();
-            if (!cr || cr.width === 0 || cr.top < 10) return null;
-            var cx = cr.left + cr.width / 2;
-            var xs = [cx, cx - 30, cx + 30];
-            for (var dy = 12; dy <= 170; dy += 14) {
-                var py = cr.top - dy;
-                if (py < 8) continue;
-                for (var xi = 0; xi < xs.length; xi++) {
-                    try {
-                        var stack = document.elementsFromPoint(xs[xi], py);
-                        for (var i = 0; i < stack.length && i < 6; i++) {
-                            var el = stack[i];
-                            if (!el || el.closest('#mp-root') || el.closest('#mp-fab')) continue;
-                            if (el.offsetParent === null) continue;
-                            var node = el;
-                            for (var d = 0; d < 5 && node && node !== document.body; d++) {
-                                var tag = (node.tagName || '').toLowerCase();
-                                var onclick = node.getAttribute && (node.getAttribute('onclick') || node.getAttribute('onmousedown') || node.getAttribute('ontouchstart') || node.getAttribute('onmouseup'));
-                                var role = node.getAttribute && node.getAttribute('role');
-                                var cur = '';
-                                try { cur = window.getComputedStyle(node).cursor || ''; } catch (e) {}
-                                if (tag === 'a' || tag === 'button' || role === 'button' || onclick || cur === 'pointer') {
-                                    if (node.offsetParent !== null) return node;
-                                }
-                                node = node.parentElement;
-                            }
-                            if ((el.tagName || '').toLowerCase() === 'img' || el.querySelector('img')) return el;
-                        }
-                    } catch (e) {}
-                }
-            }
-        } catch (e) {}
-        return null;
-    }
-
     function clickL4M(el, type) {
         try { el.scrollIntoView({ behavior: 'instant', block: 'center' }); } catch (e) {}
         setTimeout(function() {
@@ -736,14 +770,14 @@
     function startAutoScroll() {
         if (scrollState.active) return;
         S.set('scrollOn', '1');
-        if (UI.scrollToggleBtn) { UI.scrollToggleBtn.textContent = '\uD83D\uDED1 T\u1EAET L\u01AF\u1EE2T'; UI.scrollToggleBtn.className = 'mp-btn red'; }
+        if (UI.scrollToggleBtn) { UI.scrollToggleBtn.textContent = '\uD83D\uDC36 T\u1EAET L\u01AF\u1EE2T'; UI.scrollToggleBtn.className = 'mp-btn red'; }
         scrollState.active = true;
         scrollState.originY = window.pageYOffset || document.documentElement.scrollTop || 0;
         scrollState.offset = 0;
         scrollState.dir = 1;
         scrollState.lastTime = performance.now();
         scrollState.pauseUntil = 0;
-        log('\uD83D\uDD04 B\u1EACT L\u01AF\u1EE2T M\u1EC0M T\u1EA0I Y=' + Math.round(scrollState.originY));
+        log('\uD83D\uDC36 B\u1EACT L\u01AF\u1EE2T M\u1EC0M T\u1EA0I Y=' + Math.round(scrollState.originY));
         var step = function(now) {
             if (!scrollState.active) return;
             var dt = now - scrollState.lastTime;
@@ -771,8 +805,8 @@
         scrollState.active = false;
         if (scrollRAF) { cancelAnimationFrame(scrollRAF); scrollRAF = null; }
         S.set('scrollOn', '0');
-        if (UI.scrollToggleBtn) { UI.scrollToggleBtn.textContent = '\uD83D\uDD04 L\u01AF\u1EE2T NH\u1EB8'; UI.scrollToggleBtn.className = 'mp-btn orange'; }
-        log('\uD83D\uDED1 T\u1EAET L\u01AF\u1EE2T');
+        if (UI.scrollToggleBtn) { UI.scrollToggleBtn.textContent = '\uD83D\uDC36 L\u01AF\u1EE2T NH\u1EB8'; UI.scrollToggleBtn.className = 'mp-btn orange'; }
+        log('\uD83D\uDC36 T\u1EAET L\u01AF\u1EE2T');
     }
 
     function renderDomainList() {
@@ -852,17 +886,17 @@
         if (!UI.status) return;
         var map = {
             'idle': 'S\u1EB5n s\u00E0ng \u2014 nh\u1EADp domain + B\u1EAET \u0110\u1EA6U',
-            'click-google': '\uD83D\uDDA5\uFE0F \u0110ang t\u00ECm + click k\u1EBFt qu\u1EA3 Google...',
-            'scan-click1': '\uD83D\uDD0E \u0110ang s\u0103n + click n\u00FAt L4M...',
+            'click-google': '\uD83D\uDC36\uFE0F \u0110ang t\u00ECm + click k\u1EBFt qu\u1EA3 Google...',
+            'scan-click1': '\uD83D\uDC36 \u0110ang s\u0103n + click n\u00FAt L4M...',
             'counting1': '\u23F3 \u0110ang \u0111\u1EBFm phase 1...',
-            'wait-reload-text': '\uD83D\uDC40 Ch\u1EDD text reload...',
-            'reloading': '\uD83D\uDD04 \u0110ang reload...',
-            'scan-click2': '\uD83C\uDFAF \u0110ang s\u0103n + click n\u00FAt L4M l\u1EA7n 2...',
+            'wait-reload-text': '\uD83D\uDC36 Ch\u1EDD text reload...',
+            'reloading': '\uD83D\uDC36 \u0110ang reload...',
+            'scan-click2': '\uD83D\uDC36 \u0110ang s\u0103n + click n\u00FAt L4M l\u1EA7n 2...',
             'counting2': '\u23F3 \u0110ang \u0111\u1EBFm phase 2...',
-            'got-code': '\u2705 \u0110\u00E3 c\u00F3 m\u00E3',
-            'back-link4m': '\uD83C\uDFE0 \u0110ang v\u1EC1 link4m...',
-            'filling': '\uD83D\uDCDD \u0110\u00E3 \u0111i\u1EC1n m\u00E3 \u2014 gi\u1EA3i captcha v\u00E0 nh\u1EA5n x\u00E1c nh\u1EADn',
-            'done': '\uD83C\uDF89 HO\u00C0N T\u1EA4T!'
+            'got-code': '\uD83D\uDC36 \u0110\u00E3 c\u00F3 m\u00E3',
+            'back-link4m': '\uD83D\uDC36 \u0110ang v\u1EC1 link4m...',
+            'filling': '\uD83D\uDC36 \u0110\u00E3 \u0111i\u1EC1n m\u00E3 \u2014 gi\u1EA3i captcha v\u00E0 nh\u1EA5n x\u00E1c nh\u1EADn',
+            'done': '\uD83D\uDC36 HO\u00C0N T\u1EA4T!'
         };
         UI.status.textContent = map[getState()] || getState();
     }
@@ -885,7 +919,7 @@
         if (!UI.code) return;
         UI.code.classList.add('show');
         UI.codeVal.textContent = code;
-        try { navigator.clipboard.writeText(code); log('\uD83D\uDCCB \u0110\u00E3 copy code:', code); } catch (e) {}
+        try { navigator.clipboard.writeText(code); log('\uD83D\uDC36 \u0110\u00E3 copy code:', code); } catch (e) {}
     }
 
     var CD_PATTERNS = [
@@ -1106,7 +1140,7 @@
             var inp = findCodeInputOnLink4m();
 
             if (inp && !filled) {
-                log('\uD83D\uDCDD T\u1EF0 \u0110\u1ED8NG \u0110I\u1EC0N M\u00C3:', code);
+                log('\uD83D\uDC36 T\u1EF0 \u0110\u1ED8NG \u0110I\u1EC0N M\u00C3:', code);
                 try {
                     inp.focus();
                     inp.value = code;
@@ -1126,11 +1160,11 @@
                 }
             } else if (inp && filled) {
                 // \u0110\u00E3 \u0111i\u1EC1n r\u1ED3i \u2014 hi\u1EC3n th\u1ECB tr\u1EA1ng th\u00E1i ch\u1EDD user
-                UI.status.textContent = '\uD83D\uDCDD \u0110\u00E3 \u0111i\u1EC1n m\u00E3 \u2014 gi\u1EA3i captcha v\u00E0 nh\u1EA5n x\u00E1c nh\u1EADn';
+                UI.status.textContent = '\uD83D\uDC36 \u0110\u00E3 \u0111i\u1EC1n m\u00E3 \u2014 gi\u1EA3i captcha v\u00E0 nh\u1EA5n x\u00E1c nh\u1EADn';
                 showCode(code);
             } else if (!inp && !filled) {
                 // Ch\u01B0a t\u00ECm th\u1EA5y \u00F4 nh\u1EADp m\u00E3 \u2014 th\u1EED l\u1EA1i m\u1ED7i tick
-                UI.status.textContent = '\uD83D\uDCDD \u0110ang ch\u1EDD \u00F4 nh\u1EADp m\u00E3 xu\u1EA5t hi\u1EC7n...';
+                UI.status.textContent = '\uD83D\uDC36 \u0110ang ch\u1EDD \u00F4 nh\u1EADp m\u00E3 xu\u1EA5t hi\u1EC7n...';
             }
         }
 
@@ -1146,13 +1180,13 @@
         if (st !== 'click-google') return Promise.resolve();
         var domain = S.get('domain');
         if (!domain) return Promise.resolve();
-        log('\uD83D\uDDA5\uFE0F Click Google si\u00EAu nhanh cho:', domain);
+        log('\uD83D\uDC36\uFE0F Click Google si\u00EAu nhanh cho:', domain);
 
         return sleep(100).then(function() {
             var i = 0;
             var check = function() {
                 if (i >= 80) {
-                    log('\u26A0\uFE0F Kh\u00F4ng t\u00ECm th\u1EA5y link Google \u2192 m\u1EDF tr\u1EF1c ti\u1EBFp domain');
+                    log('\uD83D\uDC36 Kh\u00F4ng t\u00ECm th\u1EA5y link Google \u2192 m\u1EDF tr\u1EF1c ti\u1EBFp domain');
                     S.set('targetUrl', 'https://' + domain);
                     setState('scan-click1');
                     window.open('https://' + domain, '_blank');
@@ -1190,8 +1224,6 @@
             var p = findL4MByPoint();
             if (p) return { el: p, type: 'point' };
         }
-        var c = findL4MByCountdown();
-        if (c) return { el: c, type: 'countdown-anchor' };
         return null;
     }
 
@@ -1254,7 +1286,7 @@
             if (sc.sec > totalSec) {
                 totalSec = sc.sec;
                 S.set('serverTotalSec', totalSec.toString());
-                log('\uD83D\uDCCA M\u1ED1c g\u1ED1c phase 1 = ' + totalSec + 's');
+                log('\uD83D\uDC36 M\u1ED1c g\u1ED1c phase 1 = ' + totalSec + 's');
             }
             if (totalSec === 0) {
                 totalSec = sc.sec;
@@ -1293,7 +1325,7 @@
             if (askClick || timeout) {
                 if (askClick) log('\u2713 TH\u1EA4Y TEXT "nh\u1EA5n v\u00E0o link b\u1EA5t k\u00EC" \u2192 RELOAD');
                 if (timeout) log('\u23F1\uFE0F \u0110\u00E3 \u0111\u1EE3i 3s \u2192 RELOAD');
-                showGuide('<b>\uD83D\uDD04 \u0110ANG RELOAD...</b>');
+                showGuide('<b>\uD83D\uDC36 \u0110ANG RELOAD...</b>');
                 S.del('waitReloadStart');
                 return sleep(800).then(function() { hideTimer(); setState('reloading'); location.reload(); });
             }
@@ -1326,12 +1358,12 @@
             if (sc4.sec > totalSec2) {
                 totalSec2 = sc4.sec;
                 S.set('serverTotalSec2', totalSec2.toString());
-                log('\uD83D\uDCCA M\u1ED1c g\u1ED1c phase 2 = ' + totalSec2 + 's');
+                log('\uD83D\uDC36 M\u1ED1c g\u1ED1c phase 2 = ' + totalSec2 + 's');
             }
             if (totalSec2 === 0) {
                 totalSec2 = sc4.sec;
                 S.set('serverTotalSec2', totalSec2.toString());
-                log('\uD83D\uDCCA M\u1ED1c g\u1ED1c phase 2 = ' + totalSec2 + 's');
+                log('\uD83D\uDC36 M\u1ED1c g\u1ED1c phase 2 = ' + totalSec2 + 's');
             }
 
             var phaseLabel2 = sc4.phase + '/' + sc4.total;
@@ -1355,11 +1387,28 @@
 
         if (st === 'got-code' || st === 'back-link4m') {
             setState('back-link4m');
-            showGuide('<b>\uD83C\uDFE0 \u0110ANG QUAY V\u1EC0 LINK4M...</b>');
+            showGuide('<b>\uD83D\uDC36 \u0110ANG QUAY V\u1EC0 LINK4M...</b>');
             var l4 = S.get('link4m');
             if (l4) return sleep(2000).then(function() { location.href = l4; });
             return Promise.resolve();
         }
+        return Promise.resolve();
+    }
+
+    function handleFreeClick() {
+        try {
+            var found = findAnyL4M(true);
+            var btnEl = found ? found.el : null;
+            var btnType = found ? found.type : 'normal';
+            if (btnEl) {
+                var lastClick = parseInt(S.get('lastClickTime', '0'), 10);
+                if (Date.now() - lastClick < 2500) return Promise.resolve();
+                log('\u2713\u2713\u2713 T\u00CCM TH\u1EA4Y N\u00DAT G (free mode)! T\u1EF0 CLICK.');
+                try { if (UI.status) UI.status.textContent = '\u2713 Th\u1EA5y n\u00FAt G \u2014 \u0111ang click...'; } catch (e) {}
+                S.set('lastClickTime', Date.now().toString());
+                clickL4M(btnEl, btnType);
+            }
+        } catch (e) { log('Lỗi free click:', e.message); }
         return Promise.resolve();
     }
 
@@ -1376,6 +1425,7 @@
             if (isGoogle) p = handleGoogle();
             else if (isRealTargetPage()) p = handleTarget();
             else if (isLink4m) p = handleLink4m();
+            else if (freeMode) p = handleFreeClick();
             else p = Promise.resolve();
             p.catch(function(e){ log('L\u1ED7i:', e.message); }).then(function() {
                 if (getState() === 'done') { loopRunning = false; return; }
@@ -1392,7 +1442,7 @@
         wrap.className = 'mp-btn-row mp-reset-wrap';
         var b = document.createElement('button');
         b.className = 'mp-btn gray';
-        b.textContent = '\uD83D\uDD04 RESET TOOL';
+        b.textContent = '\uD83D\uDC36 RESET TOOL';
         b.onclick = function() {
             if (!confirm('Reset to\u00E0n b\u1ED9?')) return;
             stopAutoScroll();
@@ -1409,8 +1459,6 @@
         log('Kh\u1EDFi \u0111\u1ED9ng | Host:', HOST, '| State:', st, '| isRealTarget:', isRealTargetPage(), '| Gi\u1EA3m lag:', isLagOn() ? 'B\u1EACT' : 'T\u1EAET');
         refreshStatus();
         addResetButton();
-        try { var _gt = detectGtraffic(); if (_gt) { log('\uD83D\uDC36 Ph\u00E1t hi\u1EC7n GTRAFFIC challenge \u2192 t\u1EF1 solve'); setTimeout(function(){ runGtrafficBypass(false); }, 800); } } catch(e){}
-
 
         if (S.get('code')) showCode(S.get('code'));
 
@@ -1418,15 +1466,17 @@
             setState('scan-click1');
         }
 
-        if (st && st !== 'idle' && st !== 'done') {
+        if (freeMode || (st && st !== 'idle' && st !== 'done')) {
             loop();
         }
 
+        if (UI.bypassName) UI.bypassName.textContent = getBypassName();
         if (UI.note) {
-            if (isLink4m) UI.note.textContent = '\uD83D\uDCA1 LINK4M \u2014 nh\u1EADp domain + B\u1EAET \u0110\u1EA6U';
-            else if (isGoogle) UI.note.textContent = '\uD83D\uDCA1 GOOGLE \u2014 tool t\u1EF1 click k\u1EBFt qu\u1EA3 \u0111\u1EA7u ti\u00EAn';
-            else if (isRealTargetPage()) UI.note.textContent = '\uD83D\uDCA1 TRANG \u0110\u00CDCH \u2014 tool t\u1EF1 s\u0103n + click n\u00FAt L4M';
+            var bn = getBypassName();
+            var md = getBtnMode() === 'g' ? 'N\u00DAT G' : 'N\u00DAT L\u1EA4Y M\u00C3';
+            UI.note.textContent = '\uD83D\uDC36 BYPASS ' + bn + ' | ch\u1EB7: ' + md;
         }
+        updateBtnModeUI();
     }
 
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
