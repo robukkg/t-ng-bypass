@@ -237,7 +237,7 @@
                     '<div class="mp-flower">\uD83D\uDC36</div>' +
                     '<div class="mp-brand-txt">' +
                         '<div class="mp-title-main">TAOLAMBYPASS</div>' +
-                        '<div class="mp-title-sub">AUTO BYPASS v1.2</div>' +
+                        '<div class="mp-title-sub">AUTO BYPASS v1.1</div>' +
                     '</div>' +
                 '</div>' +
             '</div>' +
@@ -415,7 +415,6 @@
         var m = getBtnMode();
         if (m === 'g') { UI.btnMode.textContent = '\uD83D\uDC36 CH\u1EBF \u0110\u1ED8: N\u00DAT G'; UI.btnMode.className = 'mp-btn blue'; }
         else { UI.btnMode.textContent = '\uD83D\uDC36 CH\u1EBF \u0110\u1ED8: N\u00DAT L\u1EA4Y M\u00C3'; UI.btnMode.className = 'mp-btn green'; }
-        try { if (UI.note) UI.note.textContent = '\uD83D\uDC36 BYPASS ' + getBypassName() + ' | ch\u1EBF: ' + (m === 'g' ? 'N\u00DAT G' : 'N\u00DAT L\u1EA4Y M\u00C3'); } catch (e) {}
     }
 
     function updateLagBtn() {
@@ -438,15 +437,9 @@
         if (/facebook|fb\./.test(h)) return 'FACEBOOK';
         if (/youtube|youtu\.be/.test(h)) return 'YOUTUBE';
         if (/tiktok/.test(h)) return 'TIKTOK';
-        if (/fun88/.test(h)) return 'FUN88';
-        if (/paiway/.test(h)) return 'PAIWAY';
         var parts = h.split('\.');
-        var skip = {com:1,net:1,org:1,vn:1,co:1,io:1,info:1,me:1,tv:1,cc:1,xyz:1,club:1,online:1,site:1,top:1,shop:1,app:1,dev:1,cloud:1,edu:1,gov:1,mobi:1,asia:1,id:1,my:1,sg:1,uk:1,us:1,eu:1};
-        var main = '';
-        for (var i = parts.length - 1; i >= 0; i--) {
-            if (!skip[parts[i]] && parts[i] !== 'www') { main = parts[i]; break; }
-        }
-        if (!main) main = parts[0] || h;
+        var main = parts.length >= 2 ? parts[parts.length - 2] : parts[0];
+        if (!main) main = h;
         return main.toUpperCase();
     }
     function getBtnMode() { try { return S.get('btnMode', 'g'); } catch (e) { return 'g'; } }
@@ -927,18 +920,7 @@
         if (!UI.code) return;
         UI.code.classList.add('show');
         UI.codeVal.textContent = code;
-        var copied = false;
-        try { navigator.clipboard.writeText(code); copied = true; } catch (e) {}
-        try {
-            var ta = document.createElement('textarea');
-            ta.value = code; ta.style.position = 'fixed'; ta.style.opacity = '0'; ta.style.left = '-9999px';
-            document.body.appendChild(ta); ta.focus(); ta.select();
-            try { document.execCommand('copy'); copied = true; } catch (e2) {}
-            document.body.removeChild(ta);
-        } catch (e3) {}
-        if (copied) log('\uD83D\uDC36 \u2713 \u0110\u00C3 T\u1EF0 \u0110\u1ED8NG SAO CH\u00C9P M\u00C3:', code);
-        else log('\u26A0\uFE0F Kh\u00F4ng copy \u0111\u01B0\u1EE3c, b\u1EA5m tay nha:', code);
-        if (UI.status) UI.status.textContent = '\uD83D\uDC36 C\u00F3 m\u00E3 \u2192 \u0111\u00E3 sao ch\u00E9p!';
+        try { navigator.clipboard.writeText(code); log('\uD83D\uDC36 \u0110\u00E3 copy code:', code); } catch (e) {}
     }
 
     var CD_PATTERNS = [
@@ -1064,6 +1046,60 @@
         return false;
     }
 
+    // ============================================================
+    // DOC MA TU O XANH DAM GIUA TRANG (chi doc tu o nay, uu tien cao nhat)
+    // ============================================================
+    var _bbCache = { box: null, t: 0 };
+    function _bbIsDarkBlue(el) {
+        try {
+            var st = window.getComputedStyle(el);
+            var bg = st.backgroundColor || '';
+            var m = bg.match(/rgba?\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)/);
+            if (!m) return false;
+            var r = parseInt(m[1], 10), g = parseInt(m[2], 10), b = parseInt(m[3], 10);
+            return (b > 150 && r < 120 && g < 190);
+        } catch (e) { return false; }
+    }
+    function _bbFindBox() {
+        if (_bbCache.box && document.contains(_bbCache.box) && _bbCache.box.offsetParent !== null) {
+            if (Date.now() - _bbCache.t < 3000) return _bbCache.box;
+        }
+        var all = document.querySelectorAll('div, span, button, a, p, b, strong, td, li');
+        var best = null, bestScore = -9999;
+        var cx = window.innerWidth / 2, cy = window.innerHeight / 2;
+        for (var i = 0; i < all.length; i++) {
+            var el = all[i];
+            if (el.closest('#mp-root')) continue;
+            if (el.offsetParent === null) continue;
+            var t = (el.textContent || '').replace(/\s+/g, ' ').trim();
+            if (!t || t.length > 12) continue;
+            if (!_bbIsDarkBlue(el)) continue;
+            var w = el.offsetWidth, h = el.offsetHeight;
+            if (w < 40 || h < 28 || w > 280 || h > 130) continue;
+            var st = window.getComputedStyle(el);
+            var br = parseFloat(st.borderRadius || '0');
+            if (br < 8) continue;
+            var rect = el.getBoundingClientRect();
+            var ex = rect.left + rect.width / 2, ey = rect.top + rect.height / 2;
+            var dist = Math.sqrt((ex - cx) * (ex - cx) + (ey - cy) * (ey - cy));
+            var score = 2000 - dist + (br > 20 ? 80 : 0) + (t.length <= 8 ? 30 : 0) + Math.min(w, 60);
+            if (score > bestScore) { bestScore = score; best = el; }
+        }
+        if (best) { _bbCache.box = best; _bbCache.t = Date.now(); }
+        return best;
+    }
+    function readBlueBox() {
+        try {
+            var box = _bbFindBox();
+            if (!box) return null;
+            var t = (box.textContent || '').replace(/\s+/g, ' ').trim();
+            if (!t) return null;
+            if (/^\d{1,3}$/.test(t)) return null; // dang dem giay -> chua phai ma
+            if (/^[A-Za-z0-9]{4,10}$/.test(t)) return t; // MA -> tra ve ngay
+            return null;
+        } catch (e) { return null; }
+    }
+
     function extractCode() {
         var all = getFullTextAllDocs();
         var patterns = [
@@ -1082,26 +1118,6 @@
                 return c;
             }
         }
-        // Buoc cuoi: quet cac nut/button co ma alphanumeric 4-10 ky tu (vd: w5WJWdQ4 hien tren nut xanh)
-        // Chi chay khi khong con countdown (da het thoi gian cho)
-        try {
-            var scd = readServerCountdown();
-            if (!scd || scd.sec === 0) {
-                var cands = document.querySelectorAll('button, a, [role="button"], div, span');
-                var skipWords = /^(submit|login|log in|send|ok|next|back|home|menu|close|open|start|stop|play|pause|search|buy|add|cart|like|share|follow|sub|join|get|go|new|old|yes|no|on|off|play|download|upload|view|edit|delete|remove|save|cancel|confirm|accept|decline|skip|done|finish|continue|loading|load|more|less|all|none|help|info|about|contact|settings|profile|account|logout|sign out|register|signup|sign up)$/i;
-                for (var i2 = 0; i2 < cands.length; i2++) {
-                    var b = cands[i2];
-                    if (b.closest && b.closest('#mp-root')) continue;
-                    if (b.offsetParent === null) continue;
-                    var childCount = b.querySelectorAll('*').length;
-                    if (childCount > 2) continue;
-                    var txt = (b.textContent || '').replace(/\s+/g, ' ').trim();
-                    if (!/^[A-Za-z0-9]{4,10}$/.test(txt)) continue;
-                    if (skipWords.test(txt)) continue;
-                    return txt;
-                }
-            }
-        } catch (e) {}
         return null;
     }
 
@@ -1298,7 +1314,7 @@
         }
 
         if (st === 'counting1') {
-            var liveCode = extractCode();
+            var liveCode = readBlueBox() || extractCode();
             if (liveCode) { S.set('code', liveCode); showCode(liveCode); setState('got-code'); return Promise.resolve(); }
             var sc = readServerCountdown();
             if (!sc) {
@@ -1346,7 +1362,7 @@
         }
 
         if (st === 'wait-reload-text') {
-            var liveCode2 = extractCode();
+            var liveCode2 = readBlueBox() || extractCode();
             if (liveCode2) { S.set('code', liveCode2); showCode(liveCode2); setState('got-code'); return Promise.resolve(); }
 
             var waitStart = parseInt(S.get('waitReloadStart', '0'), 10);
@@ -1374,7 +1390,7 @@
         if (st === 'reloading') { setState('scan-click2'); return sleep(1000); }
 
         if (st === 'counting2') {
-            var liveCode3 = extractCode();
+            var liveCode3 = readBlueBox() || extractCode();
             if (liveCode3) { S.set('code', liveCode3); showCode(liveCode3); setState('got-code'); return Promise.resolve(); }
 
             var sc4 = readServerCountdown();
@@ -1498,7 +1514,7 @@
             else if (isRealTargetPage()) p = handleTarget();
             else if (isGtraffic) p = handleGtraffic();
             else if (isLink4m) p = handleLink4m();
-            else if (freeMode) p = handleTarget();
+            else if (freeMode) p = handleFreeClick();
             else p = Promise.resolve();
             p.catch(function(e){ log('L\u1ED7i:', e.message); }).then(function() {
                 if (getState() === 'done') { loopRunning = false; return; }
@@ -1538,7 +1554,7 @@
         if (isRealTargetPage() && st === 'click-google') {
             setState('scan-click1');
         }
-        if ((isGtraffic || freeMode) && (st === 'idle' || st === 'done')) {
+        if (isGtraffic && (st === 'idle' || st === 'done')) {
             S.del('filled');
             setState('scan-click1');
         }
