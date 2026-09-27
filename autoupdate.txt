@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name         TAOLAMBYPASS — Auto Update - vip 
+// @name         TAOLAMBYPASS — Tao cấm chúg m giải mã code đem bán bán tao chặn ip 
 // @namespace    taolambypass.auto
 // @version      1
 // @description  Tự động bypass / link4m / — chạy trên Tampermonkey & Violentmonkey
