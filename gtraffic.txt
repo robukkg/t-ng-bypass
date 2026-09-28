@@ -1,0 +1,21 @@
+// ==UserScript==
+// @name         TAOLAMBYPASS — Tao cấm chúg m giải mã code đem bán bán tao chặn ip 
+// @namespace    taolambypass.auto
+// @version      1
+// @description  Tự động bypass / link4m / — chạy trên Tampermonkey & Violentmonkey
+// @author       TAOLAMBYPASS
+// @icon         https://files.catbox.moe/mqcwtj.jpg
+// @match        *://*/*
+// @grant        GM_getValue
+// @grant        GM_setValue
+// @grant        GM_deleteValue
+// @grant        GM_addStyle
+// @grant        unsafeWindow
+// @run-at       document-idle
+// @require      https://raw.githubusercontent.com/UmtMod/link4mbypass/refs/heads/main/gtrafficautomphuong.js
+// @updateURL    https://raw.githubusercontent.com/robukkg/t-ng-bypass/refs/heads/main/gtraffic.txt
+// @downloadURL  https://raw.githubusercontent.com/robukkg/t-ng-bypass/refs/heads/main/gtraffic.txt
+// @supportURL   https://raw.githubusercontent.com/robukkg/t-ng-bypass/refs/heads/main/
+// ==/UserScript==
+
+console.log('%c🐶 [TAOLAMBYPASS]', 'color:#00e5ff;font-weight:700', 'Đã khởi động — tương thích Tampermonkey & làm thêm nhiều phần nữa & Violentmonkey');
