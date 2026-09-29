@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         TAOLAMBYPASS — Tao cấm chúg m giải mã code đem bán bán tao chặn ip 
 // @namespace    taolambypass.auto
-// @version      1
+// @version      1.1
 // @description  Tự động bypass / link4m / — chạy trên Tampermonkey & Violentmonkey
 // @author       TAOLAMBYPASS
 // @icon         https://files.catbox.moe/mqcwtj.jpg
