@@ -1,8 +1,8 @@
 // ==UserScript==
-// @name         GTraffic Bypass Auto (Fixed 404)
+// @name         GTraffic Bypass Auto (Fixed API & OCR)
 // @namespace    gtraffic.bypass
-// @version      5.4.0
-// @description  Tự động OCR ảnh, tìm link nhiệm vụ và lấy mã GTraffic - Fixed Tesseract 404
+// @version      5.5.0
+// @description  Tự động OCR ảnh, tìm link nhiệm vụ và lấy mã GTraffic - Fixed API 404
 // @author       taolambypass
 // @match        *://*/*
 // @grant        GM_xmlhttpRequest
@@ -27,7 +27,7 @@
   if (!isGTraffic) return;
 
   // ============================================================
-  // CSS (giữ nguyên)
+  // CSS
   // ============================================================
   const styles = `
     .gt-saas-panel{position:fixed;bottom:24px;right:24px;z-index:9999999;width:360px;background:#ffffff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 20px 40px -12px rgba(0,0,0,0.12),0 0 0 1px rgba(0,0,0,0.04);font-family:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;font-size:13px;color:#1f2937;overflow:hidden;transition:all 0.3s cubic-bezier(0.4,0,0.2,1)}
@@ -102,7 +102,7 @@
         </svg>
         Join Discord để nhận bản cập nhật
       </a>
-      <div class="gt-footer">v5.4 · Fixed Tesseract 404</div>
+      <div class="gt-footer">v5.5 · Fixed API 404</div>
     </div>
   `;
   document.body.appendChild(panel);
@@ -126,7 +126,7 @@
   const codeDisplay = panel.querySelector('#gt-code-display');
 
   // ============================================================
-  // OCR FIX: Chỉ định rõ workerPath, langPath, corePath
+  // FIX 1: TESSERACT WORKER PATH
   // ============================================================
   let tesseractWorker = null;
   async function getWorker() {
@@ -134,10 +134,43 @@
       tesseractWorker = await Tesseract.createWorker('eng', 1, {
         workerPath: 'https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/worker.min.js',
         langPath: 'https://tessdata.projectnaptha.com/4.0.0',
-        corePath: 'https://cdn.jsdelivr.net/npm/tesseract.js-core@5.1.1'
+        corePath: 'https://cdn.jsdelivr.net/npm/tesseract.js-core@5.1.1/tesseract-core.wasm.js'
       });
     }
     return tesseractWorker;
+  }
+
+  // ============================================================
+  // FIX 2: GM REQUEST VỚI HEADERS CHUẨN
+  // ============================================================
+  const UA = navigator.userAgent;
+
+  function gmRequest(opts) {
+    return new Promise((resolve, reject) => {
+      GM_xmlhttpRequest({
+        timeout: 30000,
+        ...opts,
+        headers: {
+          'User-Agent': UA,
+          'Accept': 'application/json, text/plain, */*',
+          'Accept-Language': 'vi-VN,vi;q=0.9,en-US;q=0.8,en;q=0.7',
+          ...opts.headers
+        },
+        onload: (res) => {
+          if (res.status >= 200 && res.status < 400) resolve(res);
+          else {
+            console.error('[GM Request Error]', {
+              url: opts.url,
+              status: res.status,
+              response: res.responseText?.slice(0, 200)
+            });
+            reject(new Error(`HTTP ${res.status}: ${res.statusText || 'Lỗi server'}`));
+          }
+        },
+        onerror: (err) => reject(new Error('Lỗi mạng: ' + (err.error || 'Network error'))),
+        ontimeout: () => reject(new Error('Hết thời gian chờ'))
+      });
+    });
   }
 
   function searchGoogle(query, num = 30) {
@@ -147,7 +180,8 @@
         url: `https://www.google.com/search?q=${encodeURIComponent(query)}&num=${num}`,
         headers: {
           'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-          'Accept-Language': 'vi-VN,vi;q=0.9,en-US;q=0.8,en;q=0.7'
+          'Accept-Language': 'vi-VN,vi;q=0.9,en-US;q=0.8,en;q=0.7',
+          'User-Agent': UA
         },
         onload: (res) => resolve(res.responseText || ''),
         onerror: (err) => reject(err)
@@ -155,6 +189,9 @@
     });
   }
 
+  // ============================================================
+  // LOGIC TÌM URL
+  // ============================================================
   function extractUrls(html) {
     const urls = new Set();
     const redirectRegex = /href=["']\/url\?(?:q|url)=([^"'&]+)/gi;
@@ -238,6 +275,9 @@
     }
   }
 
+  // ============================================================
+  // OCR
+  // ============================================================
   function fetchImageAsDataUrl(url) {
     return new Promise((resolve, reject) => {
       if (!url) return reject(new Error('URL trống'));
@@ -363,27 +403,12 @@
   setTimeout(() => runAutoOCR(false), 1500);
 
   // ============================================================
-  // API (giữ nguyên)
+  // API LẤY MÃ (FIX HEADERS CHUẨN)
   // ============================================================
   const API_CODE_BASE = 'https://gtraffic.io/api/';
   const A_DMM = "Bo be chym det ca lo nha may nhe,dinh bypass site cua bo a' _ dev said";
   const TZ = 420;
   const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-
-  function gmRequest(opts) {
-    return new Promise((resolve, reject) => {
-      GM_xmlhttpRequest({
-        timeout: 30000,
-        ...opts,
-        onload: (res) => {
-          if (res.status >= 200 && res.status < 400) resolve(res);
-          else reject(new Error(`HTTP ${res.status}: ${res.statusText || 'Lỗi server'}`));
-        },
-        onerror: (err) => reject(new Error('Lỗi mạng: ' + (err.error || 'Network error'))),
-        ontimeout: () => reject(new Error('Hết thời gian chờ'))
-      });
-    });
-  }
 
   function codeFromTime(ts, icm, tz = TZ) {
     const d = new Date((ts + tz * 60) * 1000);
@@ -420,11 +445,21 @@
 
   async function doGetCode(rid, href, origin, updateStatus) {
     updateStatus?.('Đang gửi challenge...');
-    const r1 = await gmRequest({
-      method: 'OPTIONS',
-      url: API_CODE_BASE + 'ch',
-      headers: { 'rid': rid, 'Origin': origin, 'Referer': href }
-    });
+    let r1;
+    try {
+      r1 = await gmRequest({
+        method: 'OPTIONS',
+        url: API_CODE_BASE + 'ch',
+        headers: {
+          'rid': rid,
+          'Origin': origin,
+          'Referer': href
+        }
+      });
+    } catch (e) {
+      throw new Error('Không thể kết nối tới server API (OPTIONS /api/ch): ' + e.message);
+    }
+
     const rawHeaders = r1.responseHeaders || '';
     const getHeader = (name) => {
       const match = rawHeaders.match(new RegExp(`^${name}:\\s*(.+)$`, 'im'));
@@ -433,19 +468,29 @@
     const cd = parseInt(getHeader('Cd') || '60', 10);
     const icm = parseInt(getHeader('Icm') || '1', 10);
     const ts = parseInt(getHeader('Time') || '0', 10);
-    if (!ts) throw new Error('Thiếu Time header');
+    if (!ts) throw new Error('Thiếu Time header (server không trả về)');
     const code = codeFromTime(ts, icm, TZ);
     const codeVersion = (code + 4) * 3 - 10;
-    
+
     updateStatus?.('Đang tải browser-challenge...');
-    const r2 = await gmRequest({
-      method: 'GET',
-      url: `${API_CODE_BASE}browser-challenge.js?rid=${rid}&t=${Date.now()}`,
-      headers: { 'rid': rid, 'Origin': origin, 'Referer': href }
-    });
+    let r2;
+    try {
+      r2 = await gmRequest({
+        method: 'GET',
+        url: `${API_CODE_BASE}browser-challenge.js?rid=${rid}&t=${Date.now()}`,
+        headers: {
+          'rid': rid,
+          'Origin': origin,
+          'Referer': href
+        }
+      });
+    } catch (e) {
+      throw new Error('Không thể tải browser-challenge (GET /api/browser-challenge.js): ' + e.message);
+    }
+
     const challengeId = extractJsVar(r2.responseText, 'challengeId');
     const token = extractJsVar(r2.responseText, 'token');
-    
+
     if (challengeId) {
       updateStatus?.('Đang gửi browser-solve...');
       const domParts = [
@@ -460,24 +505,28 @@
         getCanvasFp()
       ];
       const domProof = btoa(unescape(encodeURIComponent(domParts.join('|'))));
-      await gmRequest({
-        method: 'POST',
-        url: API_CODE_BASE + 'browser-solve',
-        headers: {
-          'rid': rid,
-          'Origin': origin,
-          'Referer': href,
-          'Content-Type': 'application/json'
-        },
-        data: JSON.stringify({ challengeId, rid, token, domProof })
-      });
+      try {
+        await gmRequest({
+          method: 'POST',
+          url: API_CODE_BASE + 'browser-solve',
+          headers: {
+            'rid': rid,
+            'Origin': origin,
+            'Referer': href,
+            'Content-Type': 'application/json'
+          },
+          data: JSON.stringify({ challengeId, rid, token, domProof })
+        });
+      } catch (e) {
+        throw new Error('Không thể gửi browser-solve (POST /api/browser-solve): ' + e.message);
+      }
     }
-    
+
     for (let rem = cd; rem > 0; rem--) {
       updateStatus?.(`Đang đếm ngược: ${rem}s...`, rem, cd);
       await sleep(1000);
     }
-    
+
     updateStatus?.('Đang nhận mã xác thực...');
     const cmnmf = String(icm);
     const uaBody = navigator.userAgent.slice(0, -1) + cmnmf;
@@ -497,19 +546,30 @@
     };
     const signed = { ...payload, brower_version: bver.slice(0, -1) + cmnmf };
     const contentKey = btoa(unescape(encodeURIComponent(JSON.stringify(signed))));
-    const r5 = await gmRequest({
-      method: 'POST',
-      url: API_CODE_BASE + 'code',
-      headers: {
-        'rid': rid,
-        'Content-Key': contentKey,
-        'Origin': origin,
-        'Referer': href,
-        'Content-Type': 'application/json'
-      },
-      data: JSON.stringify(payload)
-    });
-    const resData = JSON.parse(r5.responseText);
+    let r5;
+    try {
+      r5 = await gmRequest({
+        method: 'POST',
+        url: API_CODE_BASE + 'code',
+        headers: {
+          'rid': rid,
+          'Content-Key': contentKey,
+          'Origin': origin,
+          'Referer': href,
+          'Content-Type': 'application/json'
+        },
+        data: JSON.stringify(payload)
+      });
+    } catch (e) {
+      throw new Error('Không thể lấy mã (POST /api/code): ' + e.message);
+    }
+
+    let resData;
+    try {
+      resData = JSON.parse(r5.responseText);
+    } catch {
+      throw new Error('Server trả về dữ liệu không phải JSON: ' + r5.responseText.slice(0, 100));
+    }
     if (resData && resData.code) return resData.code;
     throw new Error('Lỗi lấy mã: ' + r5.responseText.slice(0, 100));
   }
