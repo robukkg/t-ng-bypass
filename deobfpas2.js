@@ -1,20 +1,4 @@
-/*
- * VNBYPASS V1.1.3 — pas2 (deobfuscated)
- * Source: pastefy.app/6ZzLL87y/raw
- * Fetched by: pas1.txt (GM wrapper)
- * Method: VNBYPASS custom VM bytecode — string table extracted + categorized
- * 
- * This file contains the MAIN BYPASS LOGIC:
- *   - UI rendering (vnbypass-wrapper, QCaptcha widget)  
- *   - Traffic API calls (/api/traffic/session, /getcode, /checkcode, /visitor)
- *   - QCaptcha solver (P-256 ECDH + HKDF + AES-GCM)
- *   - Blacklist detection
- *   - GM_xmlhttpRequest routing
- *
- * String constants extracted from 203 bytecode blobs
- */
-
-// ========== API ENDPOINTS ==========
+ ========== API ENDPOINTS ==========
 const API_BASE = 'https://api.layma.net';
 const ENDPOINTS = {
   session:   '/api/traffic/session',
