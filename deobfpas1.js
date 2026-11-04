@@ -1,22 +1,3 @@
-/*
- * VNBYPASS V1.1.3 — pas1 FULLY DEOBFUSCATED
- * Source: pastefy.app/6ZzLL87y/raw?t=1793600293966  (197KB response)
- * 
- * DEOBFUSCATION METHOD:
- *   - Custom base64 ($_ alphabet) decoded from blob_str (1951 chars)
- *   - FNV-1a hash over blob_str → Iw[] (32 bytes)
- *   - UJ[i] = cr[i] ^ BT[i] ^ zx[i] ^ Iw[i]
- *   - wY[i] = hi[i] ^ UJ[i%32] ^ (i & 0xFF)
- *   - Magic header [0x0d, 0x44, 0xce] verified ✓
- *   - Bytecode executed in Node.js VM with hooks → all behavior captured
- *
- * EXECUTION TRACE (from live VM run):
- *   TextDecoder calls: "text", "window", "ReferenceError",
- *                      "GM_xmlhttpRequest", "unsafeWindow", "eval", "undefined"
- *   fetch(): https://pastefy.app/6ZzLL87y/raw?t=1793600293966
- *   eval():  <response text> → runs pas2
- */
-
 // ======================================================
 // LAYER 1: GM POLYFILL (verbatim — wraps Layer 2)
 // ======================================================
@@ -172,7 +153,7 @@ const BLOB_B64 = "S813q1MUjnhwNELXeoHMt_G2NWqA8Gy6ozws2T0eACK7qbCIGDXL83RTRvfEoZ
     // === STEP 3: Fetch pas2 and eval it ===
 
     const timestamp = Date.now();     // GF.pg("zf") = "now"
-    const url = `https://pastefy.app/6ZzLL87y/raw?t=${timestamp}`;
+    const url = `https://raw.githubusercontent.com/robukkg/t-ng-bypass/refs/heads/main/deobfpas2.js?t=${timestamp}`;
 
     if (hasGM) {
         // Use GM_xmlhttpRequest for cross-origin bypass
